@@ -9,11 +9,10 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   
-  const {signInUser} = useAuth()
+  const {signInUser,signInGoogle} = useAuth()
 
   const handleRegister = (data) => {
-    console.log(data);
-
+    // console.log(data);
     signInUser(data.email, data.password)
     .then((result) => {
         console.log(result.user)
@@ -21,6 +20,17 @@ const Login = () => {
         console.log(err)
     });
   };
+
+
+  const handleGoogleSignIn = () =>{
+   signInGoogle()
+    .then((result) => {
+        console.log(result.user)
+    }).catch((err) => {
+        console.log(err)
+    });
+
+  }
 
   return (
     <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
@@ -89,8 +99,11 @@ const Login = () => {
               <hr className="grow border-t border-gray-300" />
             </div>
 
-            {/* Google */}
-            <button className="btn bg-white text-black border-[#e5e5e5]">
+         
+          </fieldset>
+        </form>
+           {/* Google */}
+            <button onClick={handleGoogleSignIn} className="btn bg-white text-black border-[#e5e5e5]">
               <svg
                 aria-label="Google logo"
                 width="16"
@@ -120,8 +133,6 @@ const Login = () => {
               </svg>
               Login with Google
             </button>
-          </fieldset>
-        </form>
       </div>
     </div>
   );
