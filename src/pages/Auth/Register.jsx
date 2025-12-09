@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link } from "react-router";
+import axios from "axios";
 
 const Register = () => {
   const {
@@ -10,15 +11,41 @@ const Register = () => {
     formState: { errors },
   } = useForm();
 
-  const {registerUser} =useAuth();
+  const {registerUser,updateUserProfile} =useAuth();
 
   const handleRegister = (data) => {
     console.log(data);
+
+    const profileImage = data.photoURL[0]
 
     ///////////////////
     registerUser(data.email , data.password)
     .then((result) => {
         console.log(result.user )
+        const formdata = new FormData();
+        formdata.append('image',profileImage)
+
+        const image_api_url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_api_key}`;
+        axios.post(image_api_url,formdata)
+        .then(res =>{
+            console.log('after upload',res.data.data.url)
+
+            const userProfile = {
+                displayName:data.name,
+                photoURL:res.data.data.url
+
+            }
+            updateUserProfile(userProfile)
+            .then(result =>{
+                console.log('profile update successfully', result)
+
+            })
+            .catch(err =>{
+                console.log(err)
+            })
+        })
+
+
     }).catch((err) => {
         console.log(err)
     });
@@ -54,9 +81,9 @@ const Register = () => {
             <div>
               <label className="block ">Photo URL</label>
               <input
-                type="text"
+                type="file"
                 placeholder="Enter photo URL"
-                className=" p-2 input rounded"
+                className=" p-2 input rounded file-input"
                 {...register("photoURL", { required: true })}
               />
               {errors.photoURL && (
