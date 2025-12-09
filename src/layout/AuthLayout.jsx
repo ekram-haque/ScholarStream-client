@@ -11,7 +11,7 @@ const AuthLayout = () => {
         <Logo />
       </div>
 
-      <div className="flex justify-between items-center">
+      <div className="flex justify-around items-center">
         <Outlet />
         <motion.img
           src={authimg}
