@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
 
 const Register = () => {
@@ -10,6 +10,10 @@ const Register = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const location = useLocation();
+  const navigate = useNavigate();
+
 
   const {registerUser,updateUserProfile} =useAuth();
 
@@ -38,6 +42,7 @@ const Register = () => {
             updateUserProfile(userProfile)
             .then(result =>{
                 console.log('profile update successfully', result)
+                navigate(location.state ||'/')
 
             })
             .catch(err =>{
@@ -139,7 +144,7 @@ const Register = () => {
             
             <button class="btn btn-neutral mt-4">Register</button>
           </fieldset>
-          <p>don't have an account <Link to={`/account/login`} className="text-secondary hover:underline hover:font-bold">Login</Link></p>
+          <p>Already have an account <Link state={location.state} to={`/account/login`} className="text-secondary hover:underline hover:font-bold">Login</Link></p>
 
         </form>
       </div>

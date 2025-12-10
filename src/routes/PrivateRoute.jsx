@@ -1,9 +1,10 @@
 import React from "react";
 import useAuth from "../hooks/useAuth";
-import { Navigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 
 const PrivateRoute = (children) => {
   const { user, loading } = useAuth();
+  const location = useLocation();
   if (loading) {
     return (
       <div className="flex justify-center">
@@ -12,7 +13,7 @@ const PrivateRoute = (children) => {
     );
   }
   if (!user) {
-    return <Navigate to={`/account/login`}> </Navigate>;
+    return <Navigate state={location.pathname} to={`/account/login`}> </Navigate>;
   }
   return children;
 };

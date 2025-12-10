@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 
 const Login = () => {
   const {
@@ -9,6 +9,9 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  const location = useLocation();
+  const navigate = useNavigate();
   
   const {signInUser,signInGoogle} = useAuth()
 
@@ -17,6 +20,7 @@ const Login = () => {
     signInUser(data.email, data.password)
     .then((result) => {
         console.log(result.user)
+        navigate(location?.pathname || '/')
     }).catch((err) => {
         console.log(err)
     });
@@ -27,6 +31,7 @@ const Login = () => {
    signInGoogle()
     .then((result) => {
         console.log(result.user)
+        navigate(location?.pathname || '/')
     }).catch((err) => {
         console.log(err)
     });
@@ -90,10 +95,10 @@ const Login = () => {
             )}
 
             <div>
-              <a class="link link-hover text-right">Forgot password?</a>
+              <Link to="/account/forget-password" class="link link-hover text-right">Forgot password?</Link>
             </div>
             <button class="btn btn-neutral mt-4">Login</button>
-            <p>don't have an account <Link to={`/account/register`} className="text-secondary hover:underline hover:font-bold">Register</Link></p>
+            <p>don't have an account <Link state={location.state} to={`/account/register`} className="text-secondary hover:underline hover:font-bold">Register</Link></p>
 
             <div className="flex items-center my-4">
               <hr className="grow border-t border-gray-300" />
