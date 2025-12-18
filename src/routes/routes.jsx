@@ -5,6 +5,12 @@ import AuthLayout from "../layout/AuthLayout";
 import Login from "../pages/Auth/Login";
 import Register from "../pages/Auth/Register";
 import ForgetPassword from "../pages/Auth/ForgetPassword";
+import DashboardLayout from "../layout/DashboardLayout";
+import PrivateRoute from "./PrivateRoute";
+import MyProfile from "../pages/dashboard/MyProfile";
+import allScholarShips from "../pages/allScholarShips";
+import MyApplications from "../pages/dashboard/student/MyApplications";
+import ScholarshipDetails from "../pages/ScholarShipDetails";
 
 const router = createBrowserRouter([
   {
@@ -15,10 +21,22 @@ const router = createBrowserRouter([
         index: true,
         Component: Home,
       },
+      {
+        path:'home',
+        Component:Home
+      },
+      {
+        path:'all-scholarships',
+        Component:allScholarShips
+      },
+      {
+        path:'scholarships/:id',
+        Component:ScholarshipDetails
+      }
     ],
   },
   {
-    path: "/account",
+    path: "authentication",
     Component: AuthLayout,
     children: [
       {
@@ -35,16 +53,25 @@ const router = createBrowserRouter([
       },
     ],
   },
-//   {
-//     path: "/dashboard",
-//     element: <DashboardLayout></DashboardLayout>,
-//     children: [
-//       {
-//         path: "/dashboard/profile",
-//         element: <profile></profile>,
-//       },
-//     ],
-//   }
+{
+  path: 'dashboard',
+  element: (
+    <PrivateRoute>
+      <DashboardLayout />
+    </PrivateRoute>
+  ),
+  children: [
+    {
+      path: 'my-profile',
+      element: <MyProfile />
+    },
+    {
+      path: 'my-applications',
+      element: <MyApplications />
+    },
+  ]
+}
+
 ]);
 
 export default router;

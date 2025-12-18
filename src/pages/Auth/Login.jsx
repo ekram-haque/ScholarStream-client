@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Login = () => {
   const {
@@ -12,6 +13,7 @@ const Login = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure()
   
   const {signInUser,signInGoogle} = useAuth()
 
@@ -21,6 +23,7 @@ const Login = () => {
     .then((result) => {
         console.log(result.user)
         navigate(location?.pathname || '/')
+        localStorage.setItem("access-token", data.data.token);
     }).catch((err) => {
         console.log(err)
     });
@@ -31,7 +34,26 @@ const Login = () => {
    signInGoogle()
     .then((result) => {
         console.log(result.user)
-        navigate(location?.pathname || '/')
+        navigate(location?.state || '/')
+        localStorage.setItem("access-token", result.data.token);
+
+
+        
+                const userInfo = {
+                  name:result.user.name,
+              email : result.user.email,
+              displayName:result.user.name,
+              photoURL:result.user.data.data.url
+
+            }
+
+            axiosSecure.post('/users',userInfo)
+            .then(res =>{
+              if(res.data.insertedId){
+                console.log('user created to db')
+              }
+            })
+
     }).catch((err) => {
         console.log(err)
     });
@@ -95,10 +117,10 @@ const Login = () => {
             )}
 
             <div>
-              <Link to="/account/forget-password" class="link link-hover text-right">Forgot password?</Link>
+              <Link to="/authentication/forget-password" class="link link-hover text-right">Forgot password?</Link>
             </div>
             <button class="btn btn-neutral mt-4">Login</button>
-            <p>don't have an account <Link state={location.state} to={`/account/register`} className="text-secondary hover:underline hover:font-bold">Register</Link></p>
+            <p>don't have an account <Link state={location.state} to={`/authentication/register`} className="text-secondary hover:underline hover:font-bold">Register</Link></p>
 
             <div className="flex items-center my-4">
               <hr className="grow border-t border-gray-300" />

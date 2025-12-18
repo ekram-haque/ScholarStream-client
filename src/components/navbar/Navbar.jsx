@@ -22,14 +22,19 @@ const Navbar = () => {
   const links = (
     <>
       <li>
-       <NavLink to={''} >Home</NavLink>
+       <NavLink to={'/'} >Home</NavLink>
       </li>
       <li>
-        <NavLink to={''}>All ScholarShip</NavLink>
+        <NavLink to={'all-scholarships'}>All ScholarShip</NavLink>
       </li>
-      <li>
-        <NavLink to={''}>Dashboard</NavLink>
+      
+      {
+        user && <>
+        <li>
+        <NavLink to={'/dashboard/my-profile'}>Dashboard</NavLink>
       </li>
+        </>
+      }
     </>
   );
   return (
@@ -72,7 +77,7 @@ const Navbar = () => {
       {
         user? 
         <Link  onClick={handleLogout} className=" px-3 py-2 rounded-xl bg-secondary text-primary">Log out</Link>
-        :<Link to={`/account/login`} className=" px-3 py-2 rounded-xl bg-secondary text-primary">Login</Link>
+        :<Link to={`/authentication/login`} className=" px-3 py-2 rounded-xl bg-secondary text-primary">Login</Link>
       }
       </div>
     </div>

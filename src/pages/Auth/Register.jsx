@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Register = () => {
   const {
@@ -13,50 +14,61 @@ const Register = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
 
-
-  const {registerUser,updateUserProfile} =useAuth();
+  const { registerUser, updateUserProfile } = useAuth();
 
   const handleRegister = (data) => {
     console.log(data);
 
-    const profileImage = data.photoURL[0]
+    const profileImage = data.photoURL[0];
 
     ///////////////////
-    registerUser(data.email , data.password)
-    .then((result) => {
-        console.log(result.user )
+    registerUser(data.email, data.password)
+      .then((result) => {
+        console.log(result.user);
         const formdata = new FormData();
-        formdata.append('image',profileImage)
+        formdata.append("image", profileImage);
 
-        const image_api_url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_api_key}`;
-        axios.post(image_api_url,formdata)
-        .then(res =>{
-            console.log('after upload',res.data.data.url)
+        const image_api_url = `https://api.imgbb.com/1/upload?key=${
+          import.meta.env.VITE_image_api_key
+        }`;
 
-            const userProfile = {
-                displayName:data.name,
-                photoURL:res.data.data.url
+        axios.post(image_api_url, formdata).then((res) => {
+          console.log("after upload", res.data.data.url);
 
+          const userInfo = {
+            name:data.name,
+            email: data.email,
+            displayName: data.name,
+            photoURL: res.data.data.url,
+          };
+
+          axiosSecure.post("/users", userInfo).then((res) => {
+            if (res.data.insertedId) {
+              console.log("user created to db");
             }
-            updateUserProfile(userProfile)
-            .then(result =>{
-                console.log('profile update successfully', result)
-                navigate(location.state ||'/')
+          });
 
+          const userProfile = {
+            displayName: data.name,
+            photoURL: res.data.data.url,
+          };
+
+          updateUserProfile(userProfile)
+            .then((result) => {
+              console.log("profile update successfully", result);
+              navigate(location.state || "/");
+              localStorage.setItem("access-token", res.data.token);
             })
-            .catch(err =>{
-                console.log(err)
-            })
-        })
-
-
-    }).catch((err) => {
-        console.log(err)
-    });
-
-
-
+            .catch((err) => {
+              console.log(err);
+            });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -64,9 +76,9 @@ const Register = () => {
       <div class="card-body">
         <form onSubmit={handleSubmit(handleRegister)}>
           <fieldset class="fieldset">
-             <div>
-                <h3 className='font-bold text-2xl '>New to ScholarStream! </h3>
-                <p>create your space here</p>
+            <div>
+              <h3 className="font-bold text-2xl ">New to ScholarStream! </h3>
+              <p>create your space here</p>
             </div>
             {/* Username */}
             <div>
@@ -141,11 +153,18 @@ const Register = () => {
               </p>
             )}
 
-            
             <button class="btn btn-neutral mt-4">Register</button>
           </fieldset>
-          <p>Already have an account <Link state={location.state} to={`/account/login`} className="text-secondary hover:underline hover:font-bold">Login</Link></p>
-
+          <p>
+            Already have an account{" "}
+            <Link
+              state={location.state}
+              to={`/authentication/login`}
+              className="text-secondary hover:underline hover:font-bold"
+            >
+              Login
+            </Link>
+          </p>
         </form>
       </div>
     </div>
