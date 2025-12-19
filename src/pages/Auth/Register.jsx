@@ -18,58 +18,56 @@ const Register = () => {
 
   const { registerUser, updateUserProfile } = useAuth();
 
-  const handleRegister = (data) => {
-    console.log(data);
+const handleRegister = (data) => {
+  const profileImage = data.photoURL[0];
 
-    const profileImage = data.photoURL[0];
+  // 1️⃣ Firebase Register
+  registerUser(data.email, data.password)
+    .then(() => {
+      // const user = result.user;
 
-    ///////////////////
-    registerUser(data.email, data.password)
-      .then((result) => {
-        console.log(result.user);
-        const formdata = new FormData();
-        formdata.append("image", profileImage);
+      // 2️⃣ Upload image to imgbb
+      const formData = new FormData();
+      formData.append("image", profileImage);
 
-        const image_api_url = `https://api.imgbb.com/1/upload?key=${
-          import.meta.env.VITE_image_api_key
-        }`;
+      const image_api_url = `https://api.imgbb.com/1/upload?key=${
+        import.meta.env.VITE_image_api_key
+      }`;
 
-        axios.post(image_api_url, formdata).then((res) => {
-          console.log("after upload", res.data.data.url);
+      axios.post(image_api_url, formData).then((imgRes) => {
+        const photoURL = imgRes.data.data.url;
 
-          const userInfo = {
-            name:data.name,
-            email: data.email,
-            displayName: data.name,
-            photoURL: res.data.data.url,
-          };
+        // 3️⃣ Save user to MongoDB
+        const userInfo = {
+          name: data.username,     
+          email: data.email,
+          photoURL: photoURL,
+        };
 
-          axiosSecure.post("/users", userInfo).then((res) => {
-            if (res.data.insertedId) {
-              console.log("user created to db");
-            }
-          });
+        axiosSecure.post("/users", userInfo);
 
-          const userProfile = {
-            displayName: data.name,
-            photoURL: res.data.data.url,
-          };
-
-          updateUserProfile(userProfile)
-            .then((result) => {
-              console.log("profile update successfully", result);
-              navigate(location.state || "/");
-              localStorage.setItem("access-token", res.data.token);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+        // 4️⃣ Update Firebase profile
+        updateUserProfile({
+          displayName: data.username,
+          photoURL: photoURL,
         });
-      })
-      .catch((err) => {
-        console.log(err);
+
+        // 5️⃣ Get JWT token
+        axios
+          .post("http://localhost:5000/jwt", {
+            email: data.email,
+          })
+          .then((jwtRes) => {
+            localStorage.setItem("access-token", jwtRes.data.token);
+            navigate(location.state || "/");
+          });
       });
-  };
+    })
+    .catch((err) => {
+      console.error(err);
+    });
+};
+
 
   return (
     <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">

@@ -9,8 +9,18 @@ import DashboardLayout from "../layout/DashboardLayout";
 import PrivateRoute from "./PrivateRoute";
 import MyProfile from "../pages/dashboard/MyProfile";
 import allScholarShips from "../pages/allScholarShips";
-import MyApplications from "../pages/dashboard/student/MyApplications";
 import ScholarshipDetails from "../pages/ScholarShipDetails";
+
+import AdminAnalytics from "../pages/dashboard/admin/AdminAnalytics";
+import AddScholarship from "../pages/dashboard/admin/AddScholarship";
+import ManageScholarships from "../pages/dashboard/admin/ManageScholarShip";
+import ManageUsers from "../pages/dashboard/admin/ManageUsers";
+
+import ManageApplication from "../pages/dashboard/moderator/ManageApplications";
+import AllReviews from "../pages/dashboard/moderator/AllReviews";
+
+import MyApplications from "../pages/dashboard/student/MyApplications";
+import MyReviews from "../pages/dashboard/student/MyReviews";
 
 const router = createBrowserRouter([
   {
@@ -22,17 +32,17 @@ const router = createBrowserRouter([
         Component: Home,
       },
       {
-        path:'home',
-        Component:Home
+        path: "home",
+        Component: Home,
       },
       {
-        path:'all-scholarships',
-        Component:allScholarShips
+        path: "all-scholarships",
+        Component: allScholarShips,
       },
       {
-        path:'scholarships/:id',
-        Component:ScholarshipDetails
-      }
+        path: "scholarships/:id",
+        Component: ScholarshipDetails,
+      },
     ],
   },
   {
@@ -53,25 +63,59 @@ const router = createBrowserRouter([
       },
     ],
   },
-{
-  path: 'dashboard',
-  element: (
-    <PrivateRoute>
-      <DashboardLayout />
-    </PrivateRoute>
-  ),
-  children: [
-    {
-      path: 'my-profile',
-      element: <MyProfile />
-    },
-    {
-      path: 'my-applications',
-      element: <MyApplications />
-    },
-  ]
-}
+  {
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      {
+        path: "my-profile",
+        element: <MyProfile></MyProfile>,
+      },
 
+      //admin routes
+      {
+        path: "add-scholarship",
+        element: <AddScholarship></AddScholarship>,
+      },
+      {
+        path: "manage-scholarship",
+        element: <ManageScholarships></ManageScholarships>,
+      },
+
+      {
+        path: "admin-analytics",
+        element: <AdminAnalytics></AdminAnalytics>,
+      },
+      {
+        path: "manage-users",
+        element: <ManageUsers></ManageUsers>,
+      },
+
+      //moderator routes
+      {
+        path: "manage-application",
+        element: <ManageApplication></ManageApplication>,
+      },
+      {
+        path: "all-reviews",
+        element: <AllReviews></AllReviews>,
+      },
+
+      //student routes
+      {
+        path: "my-applications",
+        element: <MyApplications></MyApplications>,
+      },
+      {
+        path: "my-reviews",
+        element: <MyReviews></MyReviews>,
+      },
+    ],
+  },
 ]);
 
 export default router;

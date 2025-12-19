@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import useAuth from "../../hooks/useAuth";
 import { Link, useLocation, useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import axios from "axios";
 
 const Login = () => {
   const {
@@ -17,49 +18,48 @@ const Login = () => {
   
   const {signInUser,signInGoogle} = useAuth()
 
-  const handleRegister = (data) => {
-    // console.log(data);
-    signInUser(data.email, data.password)
+ const handleRegister = (data) => {
+  signInUser(data.email, data.password)
     .then((result) => {
-        console.log(result.user)
-        navigate(location?.pathname || '/')
-        localStorage.setItem("access-token", data.data.token);
-    }).catch((err) => {
-        console.log(err)
+      const user = result.user;
+
+      // save user to DB
+      axiosSecure.post("/users", {
+        name: user.displayName || "User",
+        email: user.email,
+        photoURL: user.photoURL || "",
+      });
+
+      // get jwt
+      axiosSecure.post("http://localhost:5000/jwt", {
+        email: user.email,
+      }).then(res => {
+        localStorage.setItem("access-token", res.data.token);
+        navigate(location.state || "/");
+      });
     });
-  };
-
-
-  const handleGoogleSignIn = () =>{
-   signInGoogle()
+};
+const handleGoogleSignIn = () => {
+  signInGoogle()
     .then((result) => {
-        console.log(result.user)
-        navigate(location?.state || '/')
-        localStorage.setItem("access-token", result.data.token);
+      const user = result.user;
 
+      // save user
+      axiosSecure.post("/users", {
+        name: user.displayName,
+        email: user.email,
+        photoURL: user.photoURL,
+      });
 
-        
-                const userInfo = {
-                  name:result.user.name,
-              email : result.user.email,
-              displayName:result.user.name,
-              photoURL:result.user.data.data.url
-
-            }
-
-            axiosSecure.post('/users',userInfo)
-            .then(res =>{
-              if(res.data.insertedId){
-                console.log('user created to db')
-              }
-            })
-
-    }).catch((err) => {
-        console.log(err)
+      // get jwt
+      axios.post("http://localhost:5000/jwt", {
+        email: user.email,
+      }).then(res => {
+        localStorage.setItem("access-token", res.data.token);
+        navigate(location.state || "/");
+      });
     });
-
-  }
-
+};
   return (
     <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
       <div class="card-body">
