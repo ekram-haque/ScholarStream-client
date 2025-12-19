@@ -6,7 +6,7 @@ import useRole from '../../hooks/useRole';
 const MyProfile = () => {
     const {user} = useAuth()
      
-  const role = useRole();
+  const { role, roleLoading } = useRole();
     return (
   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 flex justify-center">
       <div className="bg-white shadow-lg rounded-xl p-8 w-full max-w-md text-center border border-gray-200">

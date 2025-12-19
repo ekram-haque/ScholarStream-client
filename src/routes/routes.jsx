@@ -21,6 +21,7 @@ import AllReviews from "../pages/dashboard/moderator/AllReviews";
 
 import MyApplications from "../pages/dashboard/student/MyApplications";
 import MyReviews from "../pages/dashboard/student/MyReviews";
+import AdminRoute from "./AdminRoute";
 
 const router = createBrowserRouter([
   {
@@ -79,25 +80,25 @@ const router = createBrowserRouter([
       //admin routes
       {
         path: "add-scholarship",
-        element: <AddScholarship></AddScholarship>,
+        element: <AdminRoute><AddScholarship></AddScholarship></AdminRoute>,
       },
       {
         path: "manage-scholarship",
-        element: <ManageScholarships></ManageScholarships>,
+        element: <AdminRoute><ManageScholarships></ManageScholarships></AdminRoute>,
       },
 
       {
         path: "admin-analytics",
-        element: <AdminAnalytics></AdminAnalytics>,
+        element: <AdminRoute><AdminAnalytics></AdminAnalytics></AdminRoute>,
       },
       {
         path: "manage-users",
-        element: <ManageUsers></ManageUsers>,
+        element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>,
       },
 
       //moderator routes
       {
-        path: "manage-application",
+        path: "manage-applications",
         element: <ManageApplication></ManageApplication>,
       },
       {
