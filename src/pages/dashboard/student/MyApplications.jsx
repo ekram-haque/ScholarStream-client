@@ -13,7 +13,7 @@ const MyApplications = () => {
   const [reviewModal, setReviewModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
-  const [reviewData, setReviewData] = useState({ rating: 0, comment: "" });
+  const [reviewData, setReviewData] = useState({ rating: 5, comment: "" });
 
   // Fetch user applications
   useEffect(() => {
@@ -28,7 +28,7 @@ const MyApplications = () => {
         console.error(err);
         setLoading(false);
       });
-  }, [user]);
+  }, [user,axiosSecure]);
 
   // Delete application
   const handleDelete = async (id) => {
@@ -74,28 +74,31 @@ const MyApplications = () => {
     setDetailsModal(true);
   };
 
-  // Review modal
+  // Add Review modal
   const handleAddReview = (app) => {
     setSelectedApp(app);
+    setReviewData({ rating: 5, comment: "" });
     setReviewModal(true);
   };
 
   const handleSubmitReview = async () => {
     try {
-      // Example API call to submit review
-      await axiosSecure.post(`/reviews`, {
+      await axiosSecure.post("/reviews", {
         applicationId: selectedApp._id,
-        ...reviewData,
+        scholarshipName: selectedApp.scholarshipName,
+        universityName: selectedApp.universityName,
+        ratingPoint: reviewData.rating,
+        reviewComment: reviewData.comment,
       });
       alert("Review submitted!");
       setReviewModal(false);
-      setReviewData({ rating: 0, comment: "" });
+      setReviewData({ rating: 5, comment: "" });
     } catch (error) {
       alert(error.response?.data?.message || "Failed to submit review");
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className="p-6">Loading...</p>;
 
   return (
     <div className="p-6">
@@ -123,45 +126,20 @@ const MyApplications = () => {
               <td className="px-4 py-2">${app.applicationFees}</td>
               <td className="px-4 py-2">{app.applicationStatus}</td>
               <td className="px-4 py-2 space-x-1">
-                <button
-                  className="btn btn-xs btn-info"
-                  onClick={() => handleDetails(app)}
-                >
-                  Details
-                </button>
+                <button className="btn btn-xs btn-info" onClick={() => handleDetails(app)}>Details</button>
 
                 {app.applicationStatus === "pending" && (
                   <>
-                    <button
-                      className="btn btn-xs btn-primary"
-                      onClick={() => handleEdit(app)}
-                    >
-                      Edit
-                    </button>
+                    <button className="btn btn-xs btn-primary" onClick={() => handleEdit(app)}>Edit</button>
                     {app.paymentStatus === "unpaid" && (
-                      <button
-                        className="btn btn-xs btn-success"
-                        onClick={() => handlePay(app._id)}
-                      >
-                        Pay
-                      </button>
+                      <button className="btn btn-xs btn-success" onClick={() => handlePay(app._id)}>Pay</button>
                     )}
-                    <button
-                      className="btn btn-xs btn-error"
-                      onClick={() => handleDelete(app._id)}
-                    >
-                      Delete
-                    </button>
+                    <button className="btn btn-xs btn-error" onClick={() => handleDelete(app._id)}>Delete</button>
                   </>
                 )}
 
-                {app.applicationStatus === "completed" && (
-                  <button
-                    className="btn btn-xs btn-warning"
-                    onClick={() => handleAddReview(app)}
-                  >
-                    Add Review
-                  </button>
+                {app.applicationStatus === "approved" && (
+                  <button className="btn btn-xs btn-warning" onClick={() => handleAddReview(app)}>Add Review</button>
                 )}
               </td>
             </tr>
@@ -182,12 +160,7 @@ const MyApplications = () => {
             <p><strong>Payment:</strong> {selectedApp.paymentStatus}</p>
             <p><strong>Feedback:</strong> {selectedApp.feedback || "-"}</p>
             <div className="mt-4 text-right">
-              <button
-                className="btn btn-sm btn-secondary"
-                onClick={() => setDetailsModal(false)}
-              >
-                Close
-              </button>
+              <button className="btn btn-sm btn-secondary" onClick={() => setDetailsModal(false)}>Close</button>
             </div>
           </div>
         </div>
@@ -200,36 +173,15 @@ const MyApplications = () => {
             <h3 className="text-xl font-bold mb-4">Edit Application</h3>
             <label className="block mb-2">
               University Name:
-              <input
-                type="text"
-                className="input input-bordered w-full"
-                value={selectedApp.universityName}
-                onChange={(e) =>
-                  setSelectedApp({ ...selectedApp, universityName: e.target.value })
-                }
-              />
+              <input type="text" className="input input-bordered w-full" value={selectedApp.universityName} onChange={(e) => setSelectedApp({...selectedApp, universityName: e.target.value})} />
             </label>
             <label className="block mb-2">
               Subject:
-              <input
-                type="text"
-                className="input input-bordered w-full"
-                value={selectedApp.subjectCategory}
-                onChange={(e) =>
-                  setSelectedApp({ ...selectedApp, subjectCategory: e.target.value })
-                }
-              />
+              <input type="text" className="input input-bordered w-full" value={selectedApp.subjectCategory} onChange={(e) => setSelectedApp({...selectedApp, subjectCategory: e.target.value})} />
             </label>
             <div className="mt-4 flex justify-end">
-              <button
-                className="btn btn-sm btn-secondary mr-2"
-                onClick={() => setEditModal(false)}
-              >
-                Cancel
-              </button>
-              <button className="btn btn-sm btn-primary" onClick={handleSaveEdit}>
-                Save
-              </button>
+              <button className="btn btn-sm btn-secondary mr-2" onClick={() => setEditModal(false)}>Cancel</button>
+              <button className="btn btn-sm btn-primary" onClick={handleSaveEdit}>Save</button>
             </div>
           </div>
         </div>
@@ -242,33 +194,15 @@ const MyApplications = () => {
             <h3 className="text-xl font-bold mb-4">Add Review</h3>
             <label className="block mb-2">
               Rating (1-5):
-              <input
-                type="number"
-                min="1"
-                max="5"
-                className="input input-bordered w-full"
-                value={reviewData.rating}
-                onChange={(e) => setReviewData({ ...reviewData, rating: e.target.value })}
-              />
+              <input type="number" min="1" max="5" className="input input-bordered w-full" value={reviewData.rating} onChange={(e) => setReviewData({...reviewData, rating: e.target.value})} />
             </label>
             <label className="block mb-2">
               Comment:
-              <textarea
-                className="textarea textarea-bordered w-full"
-                value={reviewData.comment}
-                onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
-              />
+              <textarea className="textarea textarea-bordered w-full" value={reviewData.comment} onChange={(e) => setReviewData({...reviewData, comment: e.target.value})} />
             </label>
             <div className="mt-4 flex justify-end">
-              <button
-                className="btn btn-sm btn-secondary mr-2"
-                onClick={() => setReviewModal(false)}
-              >
-                Cancel
-              </button>
-              <button className="btn btn-sm btn-primary" onClick={handleSubmitReview}>
-                Submit
-              </button>
+              <button className="btn btn-sm btn-secondary mr-2" onClick={() => setReviewModal(false)}>Cancel</button>
+              <button className="btn btn-sm btn-primary" onClick={handleSubmitReview}>Submit</button>
             </div>
           </div>
         </div>
