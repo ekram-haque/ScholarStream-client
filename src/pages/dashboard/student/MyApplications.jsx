@@ -1,54 +1,81 @@
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import useAuth from "../../../hooks/useAuth";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
-const MyApplications = ({ applications }) => {
+const MyApplications = () => {
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
+  const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!user) return;
+
+    axiosSecure
+      .get("/applications", { params: { email: user.email } }) // ✅ email must match JWT
+      .then((res) => {
+        setApplications(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+  }, [user]);
+
+  const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this application?")) return;
+
+  try {
+    const res = await axiosSecure.delete(`/applications/${id}`);
+    if (res.data.deletedCount > 0) {
+      alert("Application deleted successfully!");
+      setApplications(prev => prev.filter(app => app._id !== id));
+    }
+  } catch (error) {
+    alert(error.response?.data?.message || "Failed to delete");
+  }
+};
+
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6">
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">My Applications</h2>
-      <div className="overflow-x-auto bg-white shadow-lg rounded-xl border border-gray-200 p-4">
-        <table className="table w-full text-gray-700">
-          <thead className="bg-indigo-50">
-            <tr>
-              <th>University</th>
-              <th>Feedback</th>
-              <th>Subject</th>
-              <th>Application Fees</th>
-              <th>Status</th>
-              <th>Payment</th>
-              <th>Actions</th>
+    <div className="p-6">
+      <h2 className="text-3xl font-bold mb-6">My Applications</h2>
+
+      <table className="table">
+        <thead>
+          <tr>
+            <th>University</th>
+            <th>Subject</th>
+            <th>Fees</th>
+            <th>Status</th>
+            <th>Payment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {applications.map((app) => (
+            <tr key={app._id}>
+              <td>{app.universityName}</td>
+              <td>{app.subjectCategory}</td>
+              <td>${app.applicationFees}</td>
+
+              <td>{app.applicationStatus}</td>
+              <td>{app.paymentStatus}</td>
+
+              <td>
+                {app.applicationStatus === "pending" && (
+                  <>
+                    <button className="btn btn-xs btn-success mr-3">Pay</button>
+                    <button  onClick={() => handleDelete(app._id)} className="btn btn-xs btn-error">Delete</button>
+                  </>
+                )}
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {applications.map(app => (
-              <tr key={app._id} className="hover:bg-indigo-50 transition-all">
-                <td>{app.universityName}</td>
-                <td>{app.feedback || "N/A"}</td>
-                <td>{app.subjectCategory}</td>
-                <td>${app.applicationFees}</td>
-                <td>
-                  <span className={`badge ${app.applicationStatus === "pending" ? "badge-warning" : app.applicationStatus === "completed" ? "badge-success" : "badge-info"}`}>
-                    {app.applicationStatus}
-                  </span>
-                </td>
-                <td>
-                  <span className={`badge ${app.paymentStatus === "unpaid" ? "badge-error" : "badge-success"}`}>
-                    {app.paymentStatus}
-                  </span>
-                </td>
-                <td className="space-x-2">
-                  <button className="btn btn-xs btn-primary hover:scale-105 transition-transform">Details</button>
-                  {app.applicationStatus === "pending" && app.paymentStatus === "unpaid" && (
-                    <button className="btn btn-xs btn-success hover:scale-105 transition-transform">Pay</button>
-                  )}
-                  {app.applicationStatus === "pending" && (
-                    <button className="btn btn-xs btn-error hover:scale-105 transition-transform">Delete</button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </motion.div>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

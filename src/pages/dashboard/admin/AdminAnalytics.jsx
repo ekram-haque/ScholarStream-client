@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import { motion } from "framer-motion";
 import {
@@ -10,6 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 // Chart.js register
 ChartJS.register(
@@ -22,7 +23,8 @@ ChartJS.register(
 );
 
 const AdminAnalytics = () => {
-  // data কে useMemo দিয়ে wrap করলে unnecessary re-render এ নতুন chart create হয় না
+  const axiosSecure = useAxiosSecure()
+
   const data = useMemo(() => {
     return {
       labels: ["Scholarship A", "Scholarship B", "Scholarship C"],
@@ -50,6 +52,14 @@ const AdminAnalytics = () => {
       },
     };
   }, []);
+
+  const [analytics, setAnalytics] = useState({});
+
+useEffect(() => {
+  axiosSecure.get("/dashboard/analytics")
+    .then(res => setAnalytics(res.data))
+    .catch(err => console.log(err));
+}, []);
 
   return (
     <motion.div

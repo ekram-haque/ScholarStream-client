@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ManageScholarships = () => {
   const [scholarships, setScholarships] = useState([]);
   const [loading, setLoading] = useState(true);
+  const axiosSecure = useAxiosSecure()
 
   // Fetch all scholarships
   const fetchScholarships = async () => {
@@ -41,9 +43,30 @@ const ManageScholarships = () => {
     }
   };
 
-  if (loading) {
+  
+
+ 
+
+useEffect(() => {
+  axiosSecure.get("/scholarships")
+    .then(res => setScholarships(res.data.scholarships))
+    .catch(err => console.log(err));
+}, []);
+
+if (loading) {
     return <p className="text-center mt-10">Loading scholarships...</p>;
   }
+
+
+// const handleUpdateScholarship = async (id, data) => {
+//   const res = await axiosSecure.patch(`/scholarships/${id}`, data);
+//   setScholarships(prev => prev.map(s => s._id === id ? res.data : s));
+// };
+
+// const handleDeleteScholarship = async (id) => {
+//   await axiosSecure.delete(`/scholarships/${id}`);
+//   setScholarships(prev => prev.filter(s => s._id !== id));
+// };
 
   return (
     <div className="p-6">

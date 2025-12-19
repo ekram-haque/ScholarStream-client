@@ -1,7 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from "framer-motion";
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const ManageUsers = ({users}) => {
+
+  const axiosSecure = useAxiosSecure()
+
+
+const [user, setUsers] = useState([]);
+
+useEffect(() => {
+  axiosSecure.get("/dashboard/users")
+    .then(res => setUsers(res.data))
+    .catch(err => console.log(err));
+}, []);
+
+// const handleRoleChange = async (userId, newRole) => {
+//   await axiosSecure.patch(`/dashboard/users/${userId}/role`, { role: newRole });
+//   setUsers(prev => prev.map(u => u._id === userId ? { ...u, role: newRole } : u));
+// };
+
+// const handleDeleteUser = async (userId) => {
+//   await axiosSecure.delete(`/dashboard/users/${userId}`);
+//   setUsers(prev => prev.filter(u => u._id !== userId));
+// };
+
+
+
+
+
     return (
        <motion.div 
       initial={{ opacity: 0 }}

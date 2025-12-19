@@ -52,7 +52,7 @@ const handleGoogleSignIn = () => {
       });
 
       // get jwt
-      axios.post("http://localhost:5000/jwt", {
+      axiosSecure.post("http://localhost:5000/jwt", {
         email: user.email,
       }).then(res => {
         localStorage.setItem("access-token", res.data.token);

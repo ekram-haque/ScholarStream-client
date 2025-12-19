@@ -81,7 +81,7 @@ const router = createBrowserRouter([
       //admin routes
       {
         path: "add-scholarship",
-        element: <AdminRoute><AddScholarship></AddScholarship></AdminRoute>,
+        element: <AddScholarship></AddScholarship>,
       },
       {
         path: "manage-scholarship",

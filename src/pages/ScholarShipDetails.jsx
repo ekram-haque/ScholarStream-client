@@ -1,12 +1,16 @@
 import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import useAuth from "../hooks/useAuth";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [scholarship, setScholarship] = useState(null);
   const [loading, setLoading] = useState(true);
+  const {user} = useAuth();
+  const axiosSecure = useAxiosSecure()
 
   useEffect(() => {
     axios
@@ -39,10 +43,33 @@ const ScholarshipDetails = () => {
     scholarshipDescription,
   } = scholarship;
 
-  const handleApply = () => {
-    // navigate to payment page
-    navigate(`/scholarships/${id}/apply`);
+const handleApply = async () => {
+  if (!user) {
+    return navigate("/login");
+  }
+
+  const applicationData = {
+    scholarshipId: scholarship._id,
+    userName: user.displayName,
+    universityName: scholarship.universityName,
+    subjectCategory: scholarship.subjectCategory,
+    degree: scholarship.degree,
+    applicationFees: scholarship.applicationFees,
+    serviceCharge: scholarship.serviceCharge,
   };
+
+  try {
+    const res = await axiosSecure.post("/applications", applicationData);
+
+    if (res.data.insertedId) {
+      alert("Application submitted successfully!");
+      navigate("/dashboard/my-applications");
+    }
+  } catch (error) {
+    alert(error.response?.data?.message || "Failed to apply");
+  }
+};
+
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
