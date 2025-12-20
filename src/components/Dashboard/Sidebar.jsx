@@ -160,7 +160,7 @@ const Sidebar = () => {
 
             <li>
               <Link
-                to={"/dashboard/analytics"}
+                to={"/dashboard/admin-analytics"}
                 className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
                 data-tip="analytics"
               >
