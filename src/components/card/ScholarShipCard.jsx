@@ -1,6 +1,5 @@
 import { Link } from "react-router";
 
-
 const ScholarshipCard = ({ scholarship }) => {
   const {
     _id,
@@ -8,32 +7,67 @@ const ScholarshipCard = ({ scholarship }) => {
     universityName,
     scholarshipCategory,
     universityCountry,
+    universityCity,
+    universityWorldRank,
     applicationFees,
   } = scholarship;
 
   return (
-    <div className="card bg-base-100 shadow-md h-full">
-      <figure>
+    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col group">
+
+      {/* Image Section */}
+      <div className="relative">
         <img
           src={universityImage}
           alt={universityName}
-          className="h-48 w-full object-cover"
+          className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
-      </figure>
 
-      <div className="card-body">
-        <h2 className="card-title">{universityName}</h2>
-        <p>Category: {scholarshipCategory}</p>
-        <p>Country: {universityCountry}</p>
-        <p className="font-semibold">
-          Application Fee: ${applicationFees}
+        {/* Scholarship Category */}
+        <span className="absolute top-3 left-3 bg-secondary  text-xs font-semibold px-3 py-1 rounded-full shadow">
+          {scholarshipCategory}
+        </span>
+
+        {/* World Rank */}
+        {universityWorldRank && (
+          <span className="absolute top-3 right-3 bg-secondary text-gray-900 text-xs font-semibold px-3 py-1 rounded-full shadow">
+            🌍 Rank #{universityWorldRank}
+          </span>
+        )}
+      </div>
+
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-1">
+
+        {/* University Name */}
+        <h3 className="text-lg font-semibold text-gray-900 leading-snug">
+          {universityName}
+        </h3>
+
+        {/* Location */}
+        <p className="text-sm text-gray-500 mt-1">
+          {universityCity ? `${universityCity}, ` : ""}
+          {universityCountry}
         </p>
 
-        <div className="card-actions justify-end">
-          <Link to={`/scholarships/${_id}`} className="btn btn-primary btn-sm">
-            View Details
-          </Link>
+        {/* Divider */}
+        <div className="my-4 border-t border-secondary"></div>
+
+        {/* Fee */}
+        <div className="flex  items-center text-sm mb-4">
+          <span className="text-gray-600 mr-2">Application Fee :  </span>
+          <span className={`font-semibold ${applicationFees === 0 ? "text-green-600" : "text-gray-900"}`}>
+            {applicationFees === 0 ? "Free" : `$${applicationFees}`}
+          </span>
         </div>
+
+        {/* CTA */}
+        <Link
+          to={`/scholarships/${_id}`}
+          className="mt-auto inline-flex justify-center items-center px-4 py-2 rounded-lg text-sm font-medium border border-secondary text-primary hover:bg-secondary hover:text-black transition"
+        >
+          View Details
+        </Link>
       </div>
     </div>
   );

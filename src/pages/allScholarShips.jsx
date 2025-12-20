@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import ScholarshipCard from "../components/card/ScholarShipCard";
 
@@ -24,7 +23,8 @@ const AllScholarships = () => {
       .then((res) => {
         setScholarships(res.data.scholarships);
         setCount(res.data.total);
-      });
+      })
+      .catch((err) => console.error(err));
   }, [search, category, sort, page, axiosSecure]);
 
   return (
@@ -63,30 +63,34 @@ const AllScholarships = () => {
         </select>
       </div>
 
-      {/* Scholarships Grid */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {scholarships.map((scholarship) => (
-          <ScholarshipCard
-            key={scholarship._id}
-            scholarship={scholarship}
-          />
-        ))}
-      </div>
+      {/* Scholarships Grid or No Results */}
+      {search.trim() !== "" && scholarships.length === 0 ? (
+        <p className="p-6 text-center text-gray-500">No Scholarships found.</p>
+      ) : (
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {scholarships.map((scholarship) => (
+            <ScholarshipCard
+              key={scholarship._id}
+              scholarship={scholarship}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Pagination */}
-      <div className="flex justify-center mt-10 gap-2">
-        {[...Array(totalPages).keys()].map((num) => (
-          <button
-            key={num}
-            className={`btn btn-sm ${
-              page === num + 1 ? "btn-primary" : ""
-            }`}
-            onClick={() => setPage(num + 1)}
-          >
-            {num + 1}
-          </button>
-        ))}
-      </div>
+      {totalPages > 1 && (
+        <div className="flex justify-center mt-10 gap-2">
+          {[...Array(totalPages).keys()].map((num) => (
+            <button
+              key={num}
+              className={`btn btn-sm ${page === num + 1 ? "btn-primary" : ""}`}
+              onClick={() => setPage(num + 1)}
+            >
+              {num + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
