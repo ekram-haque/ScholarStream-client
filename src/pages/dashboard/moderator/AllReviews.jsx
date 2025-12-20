@@ -37,12 +37,12 @@ const ModeratorReviews = () => {
   if (loading) return <p className="p-6">Loading reviews...</p>;
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-[#e7fafc]">
       <h2 className="text-3xl font-bold mb-6">All Reviews</h2>
 
-      <table className="table-auto w-full border">
+      <table className="overflow-x-auto w-full bg-white shadow-lg rounded-xl ">
         <thead>
-          <tr className="bg-gray-200">
+          <tr className="bg-primary text-secondary">
             <th className="px-4 py-2">Student Name</th>
             <th className="px-4 py-2">Student Email</th>
             <th className="px-4 py-2">Scholarship</th>
@@ -55,7 +55,7 @@ const ModeratorReviews = () => {
         </thead>
         <tbody>
           {reviews.map((r) => (
-            <tr key={r._id} className="border-b">
+            <tr key={r._id} className="hover:bg-[#e7fafc] transition-all border border-gray-200 p-4">
               <td className="px-4 py-2">{r.userName || r.displayName}</td>
               <td className="px-4 py-2">{r.userEmail}</td>
               <td className="px-4 py-2">{r.scholarshipName}</td>

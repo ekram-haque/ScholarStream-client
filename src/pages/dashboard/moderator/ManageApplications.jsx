@@ -64,12 +64,12 @@ useEffect(() => {
   if (loading) return <p className="p-6">Loading applications...</p>;
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-6 bg-[#e7fafc]">
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Manage Applications</h2>
 
       <div className="overflow-x-auto bg-white shadow-lg rounded-xl border border-gray-200 p-4">
         <table className="table w-full text-gray-700">
-          <thead className="bg-indigo-50">
+          <thead className="bg-primary text-secondary">
             <tr>
               <th>Applicant Name</th>
               <th>Email</th>
@@ -82,7 +82,7 @@ useEffect(() => {
           </thead>
           <tbody>
             {applications.map((app) => (
-              <tr key={app._id} className="hover:bg-indigo-50 transition-all">
+              <tr key={app._id} className="hover:bg-[#e7fafc] transition-all">
                 <td>{app.userName}</td>
                 <td>{app.userEmail}</td>
                 <td>{app.universityName}</td>

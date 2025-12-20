@@ -42,7 +42,7 @@ const Banner = () => {
           </div>
 
           <Link
-            to="/scholarships"
+            to="/all-scholarships"
             className="inline-block mt-8 bg-secondary text-black px-7 py-4 rounded-xl text-lg shadow-md hover:bg-primary hover:text-white transition"
           >
             Find Scholarships Now

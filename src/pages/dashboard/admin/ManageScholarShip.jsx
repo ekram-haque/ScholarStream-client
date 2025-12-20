@@ -71,11 +71,11 @@ const handleSaveEdit = async () => {
   }
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-[#e7fafc]">
       <h1 className="text-2xl font-bold mb-4">Manage Scholarships</h1>
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto bg-white shadow-lg rounded-xl border border-gray-200 p-4">
         <table className="table table-zebra w-full">
-          <thead>
+          <thead className="bg-primary text-secondary">
             <tr>
               <th>#</th>
               <th>University</th>
@@ -89,14 +89,14 @@ const handleSaveEdit = async () => {
           </thead>
           <tbody>
             {scholarships.length === 0 && (
-              <tr>
+              <tr className="hover:bg-[#e7fafc] transition-all">
                 <td colSpan="8" className="text-center">
                   No scholarships found
                 </td>
               </tr>
             )}
             {scholarships.map((sch, index) => (
-              <tr key={sch._id}>
+              <tr key={sch._id} className="hover:bg-[#e7fafc] transition-all">
                 <th>{index + 1}</th>
                 <td>{sch.universityName}</td>
                 <td>{sch.scholarshipName}</td>

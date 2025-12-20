@@ -66,7 +66,7 @@ const AddScholarship = () => {
     <motion.div
       initial={{ y: 50, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      className="p-6"
+      className="p-6 bg-[#e7fafc]"
     >
       <h2 className="text-3xl font-bold mb-6 text-gray-800">Add New Scholarship</h2>
       {success && <p className="text-green-600 mb-2">{success}</p>}
@@ -82,7 +82,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="Scholarship Name"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
           required
         />
         <input
@@ -91,7 +91,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="University Name"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
           required
         />
         <input
@@ -100,7 +100,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="University Image URL"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="country"
@@ -108,7 +108,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="Country"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
           required
         />
         <input
@@ -117,7 +117,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="City"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
           required
         />
         <input
@@ -126,7 +126,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="number"
           placeholder="World Rank"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="subjectCategory"
@@ -134,7 +134,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="Subject Category"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="scholarshipCategory"
@@ -142,7 +142,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="Scholarship Category"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="degree"
@@ -150,7 +150,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="text"
           placeholder="Degree"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="tuitionFees"
@@ -158,7 +158,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="number"
           placeholder="Tuition Fees (optional)"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="applicationFees"
@@ -166,7 +166,7 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="number"
           placeholder="Application Fees"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="serviceCharge"
@@ -174,16 +174,16 @@ const AddScholarship = () => {
           onChange={handleChange}
           type="number"
           placeholder="Service Charge"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
         <input
           name="deadline"
           value={formData.deadline}
           onChange={handleChange}
           type="date"
-          className="input input-bordered w-full"
+          className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
-        <button disabled={loading} className="btn btn-indigo col-span-full mt-2">
+        <button disabled={loading} className="btn bg-secondary col-span-full mt-2">
           {loading ? "Adding..." : "Add Scholarship"}
         </button>
       </form>

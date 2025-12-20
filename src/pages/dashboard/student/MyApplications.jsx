@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { FaTimes, FaStar } from "react-icons/fa";
 
 const MyApplications = () => {
   const { user } = useAuth();
@@ -28,7 +29,7 @@ const MyApplications = () => {
         console.error(err);
         setLoading(false);
       });
-  }, [user,axiosSecure]);
+  }, [user, axiosSecure]);
 
   // Delete application
   const handleDelete = async (id) => {
@@ -98,117 +99,189 @@ const MyApplications = () => {
     }
   };
 
-  if (loading) return <p className="p-6">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center p-10">
+        <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-10 w-10"></div>
+      </div>
+    );
+  }
+
+  if (applications.length === 0) {
+    return <p className="text-center p-10 text-gray-500">No applications found.</p>;
+  }
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-bold mb-6">My Applications</h2>
+    <div className="p-6 bg-[#e7fafc]">
+      <h2 className="text-3xl font-bold mb-6 ">My Applications</h2>
 
-      <table className="table-auto w-full border">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="px-4 py-2">University</th>
-            <th className="px-4 py-2">Address</th>
-            <th className="px-4 py-2">Feedback</th>
-            <th className="px-4 py-2">Subject</th>
-            <th className="px-4 py-2">Fees</th>
-            <th className="px-4 py-2">Status</th>
-            <th className="px-4 py-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.map((app) => (
-            <tr key={app._id} className="border-b">
-              <td className="px-4 py-2">{app.universityName}</td>
-              <td className="px-4 py-2">{app.universityAddress || "-"}</td>
-              <td className="px-4 py-2">{app.feedback || "-"}</td>
-              <td className="px-4 py-2">{app.subjectCategory}</td>
-              <td className="px-4 py-2">${app.applicationFees}</td>
-              <td className="px-4 py-2">{app.applicationStatus}</td>
-              <td className="px-4 py-2 space-x-1">
-                <button className="btn btn-xs btn-info" onClick={() => handleDetails(app)}>Details</button>
-
-                {app.applicationStatus === "pending" && (
-                  <>
-                    <button className="btn btn-xs btn-primary" onClick={() => handleEdit(app)}>Edit</button>
-                    {app.paymentStatus === "unpaid" && (
-                      <button className="btn btn-xs btn-success" onClick={() => handlePay(app._id)}>Pay</button>
-                    )}
-                    <button className="btn btn-xs btn-error" onClick={() => handleDelete(app._id)}>Delete</button>
-                  </>
-                )}
-
-                {app.applicationStatus === "approved" && (
-                  <button className="btn btn-xs btn-warning" onClick={() => handleAddReview(app)}>Add Review</button>
-                )}
-              </td>
+      <div className="overflow-x-auto bg-white shadow-lg rounded-xl border border-gray-200 p-4">
+        <table className="table w-full text-gray-700">
+          <thead className="bg-primary text-secondary ">
+            <tr>
+              <th className="px-4 py-2 text-left">University</th>
+              <th className="px-4 py-2 text-left">Address</th>
+              <th className="px-4 py-2 text-left">Feedback</th>
+              <th className="px-4 py-2 text-left">Subject</th>
+              <th className="px-4 py-2 text-left">Fees</th>
+              <th className="px-4 py-2 text-left">Status</th>
+              <th className="px-4 py-2 text-left">Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {applications.map((app) => (
+              <tr key={app._id} className="border-b hover:bg-[#e7fafc] transition">
+                <td className="px-4 py-2">{app.universityName}</td>
+                <td className="px-4 py-2">{app.universityAddress || "-"}</td>
+                <td className="px-4 py-2">{app.feedback || "-"}</td>
+                <td className="px-4 py-2">{app.subjectCategory}</td>
+                <td className="px-4 py-2">${app.applicationFees}</td>
+                <td className="px-4 py-2">{app.applicationStatus}</td>
+                <td className="px-4 py-2 flex flex-wrap gap-1">
+                  <button
+                    onClick={() => handleDetails(app)}
+                    className="px-2 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 transition"
+                  >
+                    Details
+                  </button>
+
+                  {app.applicationStatus === "pending" && (
+                    <>
+                      <button
+                        onClick={() => handleEdit(app)}
+                        className="px-2 py-1 bg-indigo-500 text-white text-xs rounded hover:bg-indigo-600 transition"
+                      >
+                        Edit
+                      </button>
+                      {app.paymentStatus === "unpaid" && (
+                        <button
+                          onClick={() => handlePay(app._id)}
+                          className="px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition"
+                        >
+                          Pay
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleDelete(app._id)}
+                        className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition"
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+
+                  {app.applicationStatus === "approved" && (
+                    <button
+                      onClick={() => handleAddReview(app)}
+                      className="px-2 py-1 bg-yellow-500 text-white text-xs rounded hover:bg-yellow-600 transition"
+                    >
+                      Add Review
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Details Modal */}
       {detailsModal && selectedApp && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-1/2">
-            <h3 className="text-xl font-bold mb-4">Application Details</h3>
-            <p><strong>University:</strong> {selectedApp.universityName}</p>
-            <p><strong>Address:</strong> {selectedApp.universityAddress || "-"}</p>
-            <p><strong>Subject:</strong> {selectedApp.subjectCategory}</p>
-            <p><strong>Fees:</strong> ${selectedApp.applicationFees}</p>
-            <p><strong>Status:</strong> {selectedApp.applicationStatus}</p>
-            <p><strong>Payment:</strong> {selectedApp.paymentStatus}</p>
-            <p><strong>Feedback:</strong> {selectedApp.feedback || "-"}</p>
-            <div className="mt-4 text-right">
-              <button className="btn btn-sm btn-secondary" onClick={() => setDetailsModal(false)}>Close</button>
-            </div>
-          </div>
-        </div>
+        <Modal title="Application Details" onClose={() => setDetailsModal(false)}>
+          <DetailsContent app={selectedApp} />
+        </Modal>
       )}
 
       {/* Edit Modal */}
       {editModal && selectedApp && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-1/2">
-            <h3 className="text-xl font-bold mb-4">Edit Application</h3>
-            <label className="block mb-2">
+        <Modal title="Edit Application" onClose={() => setEditModal(false)}>
+          <div className="space-y-3">
+            <label className="block">
               University Name:
-              <input type="text" className="input input-bordered w-full" value={selectedApp.universityName} onChange={(e) => setSelectedApp({...selectedApp, universityName: e.target.value})} />
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={selectedApp.universityName}
+                onChange={(e) => setSelectedApp({ ...selectedApp, universityName: e.target.value })}
+              />
             </label>
-            <label className="block mb-2">
+            <label className="block">
               Subject:
-              <input type="text" className="input input-bordered w-full" value={selectedApp.subjectCategory} onChange={(e) => setSelectedApp({...selectedApp, subjectCategory: e.target.value})} />
+              <input
+                type="text"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                value={selectedApp.subjectCategory}
+                onChange={(e) => setSelectedApp({ ...selectedApp, subjectCategory: e.target.value })}
+              />
             </label>
-            <div className="mt-4 flex justify-end">
-              <button className="btn btn-sm btn-secondary mr-2" onClick={() => setEditModal(false)}>Cancel</button>
-              <button className="btn btn-sm btn-primary" onClick={handleSaveEdit}>Save</button>
+            <div className="flex justify-end gap-2 mt-4">
+              <button onClick={() => setEditModal(false)} className="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-500 transition">Cancel</button>
+              <button onClick={handleSaveEdit} className="px-3 py-1 bg-indigo-500 text-white rounded hover:bg-indigo-600 transition">Save</button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
 
       {/* Review Modal */}
       {reviewModal && selectedApp && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-1/2">
-            <h3 className="text-xl font-bold mb-4">Add Review</h3>
-            <label className="block mb-2">
+        <Modal title="Add Review" onClose={() => setReviewModal(false)}>
+          <div className="space-y-3">
+            <label className="block">
               Rating (1-5):
-              <input type="number" min="1" max="5" className="input input-bordered w-full" value={reviewData.rating} onChange={(e) => setReviewData({...reviewData, rating: e.target.value})} />
+              <input
+                type="number"
+                min="1"
+                max="5"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                value={reviewData.rating}
+                onChange={(e) => setReviewData({ ...reviewData, rating: e.target.value })}
+              />
             </label>
-            <label className="block mb-2">
+            <label className="block">
               Comment:
-              <textarea className="textarea textarea-bordered w-full" value={reviewData.comment} onChange={(e) => setReviewData({...reviewData, comment: e.target.value})} />
+              <textarea
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                value={reviewData.comment}
+                onChange={(e) => setReviewData({ ...reviewData, comment: e.target.value })}
+              />
             </label>
-            <div className="mt-4 flex justify-end">
-              <button className="btn btn-sm btn-secondary mr-2" onClick={() => setReviewModal(false)}>Cancel</button>
-              <button className="btn btn-sm btn-primary" onClick={handleSubmitReview}>Submit</button>
+            <div className="flex justify-end gap-2 mt-4">
+              <button onClick={() => setReviewModal(false)} className="px-3 py-1 bg-gray-400 text-white rounded hover:bg-gray-500 transition">Cancel</button>
+              <button onClick={handleSubmitReview} className="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">Submit</button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </div>
   );
 };
+
+// Modal Component
+const Modal = ({ title, children, onClose }) => (
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
+    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 relative">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="text-xl font-bold">{title}</h3>
+        <button onClick={onClose} className="text-gray-500 hover:text-gray-800 text-lg">
+          <FaTimes />
+        </button>
+      </div>
+      {children}
+    </div>
+  </div>
+);
+
+// Details content
+const DetailsContent = ({ app }) => (
+  <div className="space-y-2 text-sm text-gray-700">
+    <p><strong>University:</strong> {app.universityName}</p>
+    <p><strong>Address:</strong> {app.universityAddress || "-"}</p>
+    <p><strong>Subject:</strong> {app.subjectCategory}</p>
+    <p><strong>Fees:</strong> ${app.applicationFees}</p>
+    <p><strong>Status:</strong> {app.applicationStatus}</p>
+    <p><strong>Payment:</strong> {app.paymentStatus}</p>
+    <p><strong>Feedback:</strong> {app.feedback || "-"}</p>
+  </div>
+);
 
 export default MyApplications;

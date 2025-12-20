@@ -84,7 +84,7 @@ export default function TopScholarShip() {
       </p>
 
          <Link
-            to="/scholarships"
+            to="/all-scholarships"
             className="inline-block  bg-secondary text-black px-7 py-3 rounded-lg text-lg shadow-md hover:bg-primary hover:text-white transition"
           >
             View All 
@@ -142,7 +142,7 @@ export default function TopScholarShip() {
                   </div>
                 </div>
 
-                <button className="mt-6 bg-orange-500 text-white py-2 rounded-xl hover:bg-orange-600 transition">
+                <button className="mt-6 bg-secondary text-white py-2 rounded-xl  transition">
                   Apply Now
                 </button>
               </motion.div>

@@ -57,7 +57,7 @@ const ManageUsers = () => {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="p-6"
+      className="p-6 bg-[#e7fafc]"
     >
       <h2 className="text-3xl font-bold mb-4 text-gray-800">Manage Users</h2>
 
@@ -76,9 +76,9 @@ const ManageUsers = () => {
         </select>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto  ">
         <table className="table w-full text-gray-700 bg-white shadow-lg rounded-xl border border-gray-200">
-          <thead className="bg-indigo-50">
+          <thead className="bg-primary text-secondary">
             <tr>
               <th>Name</th>
               <th>Email</th>
@@ -93,16 +93,16 @@ const ManageUsers = () => {
               </tr>
             )}
             {filteredUsers.map(user => (
-              <tr key={user._id} className="hover:bg-indigo-50 transition-all">
-                <td>{user.displayName}</td>
+              <tr key={user._id} className="hover:bg-[#e7fafc] transition-all">
+                <td>{user.displayName || user.name || "N/A"}</td>
                 <td>{user.email}</td>
                 <td className="capitalize">{user.role}</td>
-                <td className="space-x-2">
+                <td className="space-x-2 ">
                   {/* Promote/Demote Buttons */}
                   {user.role === "student" && (
                     <>
                       <button 
-                        className="btn btn-xs btn-success hover:scale-105 transition-transform"
+                        className="btn btn-xs btn-success hover:scale-105  transition-transform"
                         onClick={() => handleRoleChange(user._id, "moderator")}
                       >
                         Promote to Moderator
