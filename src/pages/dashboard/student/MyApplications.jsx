@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { FaTimes, FaStar } from "react-icons/fa";
+import { Link, useNavigate } from "react-router";
 
 const MyApplications = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   // Modal states
   const [detailsModal, setDetailsModal] = useState(false);
@@ -65,10 +67,9 @@ const MyApplications = () => {
   };
 
   // Payment redirect
-  const handlePay = (appId) => {
-    window.location.href = `/payment/${appId}`;
-  };
-
+ const handlePay = (appId) => {
+  navigate(`/dashboard/payment/${appId}`);
+};
   // Details modal
   const handleDetails = (app) => {
     setSelectedApp(app);
@@ -147,36 +148,36 @@ const MyApplications = () => {
 
                   {app.applicationStatus === "pending" && (
                     <>
-                      <button
+                      <Link
                         onClick={() => handleEdit(app)}
                         className="px-2 py-1 bg-indigo-500 text-white text-xs rounded hover:bg-indigo-600 transition"
                       >
                         Edit
-                      </button>
+                      </Link>
                       {app.paymentStatus === "unpaid" && (
-                        <button
+                        <Link
                           onClick={() => handlePay(app._id)}
                           className="px-2 py-1 bg-green-500 text-white text-xs rounded hover:bg-green-600 transition"
                         >
                           Pay
-                        </button>
+                        </Link>
                       )}
-                      <button
+                      <Link
                         onClick={() => handleDelete(app._id)}
                         className="px-2 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600 transition"
                       >
                         Delete
-                      </button>
+                      </Link>
                     </>
                   )}
 
                   {app.applicationStatus === "approved" && (
-                    <button
+                    <Link
                       onClick={() => handleAddReview(app)}
                       className="px-2 py-1 bg-yellow-500 text-white text-xs rounded hover:bg-yellow-600 transition"
                     >
                       Add Review
-                    </button>
+                    </Link>
                   )}
                 </td>
               </tr>

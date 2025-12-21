@@ -23,21 +23,28 @@ const ScholarshipCard = ({ scholarship }) => {
           className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
         />
 
-        {/* Scholarship Category */}
-        <span className="absolute top-3 left-3 bg-secondary  text-xs font-semibold px-3 py-1 rounded-full shadow">
+       
+      </div>
+
+      {/* Content */}
+      <div className="p-5 flex flex-col flex-1">
+
+        <div className="flex gap-4 mb-4">
+
+
+
+         {/* Scholarship Category */}
+        <span className="  bg-secondary   text-xs font-semibold px-3 py-1 rounded-lg shadow">
           {scholarshipCategory}
         </span>
 
         {/* World Rank */}
         {universityWorldRank && (
-          <span className="absolute top-3 right-3 bg-secondary text-gray-900 text-xs font-semibold px-3 py-1 rounded-full shadow">
+          <span className="  bg-secondary text-gray-900 text-xs font-semibold px-3 py-1 rounded-lg shadow">
             🌍 Rank #{universityWorldRank}
           </span>
         )}
-      </div>
-
-      {/* Content */}
-      <div className="p-5 flex flex-col flex-1">
+        </div>
 
         {/* University Name */}
         <h3 className="text-lg font-semibold text-gray-900 leading-snug">
@@ -49,6 +56,8 @@ const ScholarshipCard = ({ scholarship }) => {
           {universityCity ? `${universityCity}, ` : ""}
           {universityCountry}
         </p>
+
+        
 
         {/* Divider */}
         <div className="my-4 border-t border-secondary"></div>
@@ -64,7 +73,7 @@ const ScholarshipCard = ({ scholarship }) => {
         {/* CTA */}
         <Link
           to={`/scholarships/${_id}`}
-          className="mt-auto inline-flex justify-center items-center px-4 py-2 rounded-lg text-sm font-medium border border-secondary text-primary hover:bg-secondary hover:text-black transition"
+          className="mt-auto inline-flex justify-center items-center px-4 py-2 rounded-lg text-sm font-medium border border-secondary text-primary hover:bg-secondary hover:scale-105 transition transform"
         >
           View Details
         </Link>

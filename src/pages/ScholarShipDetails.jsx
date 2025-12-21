@@ -4,13 +4,14 @@ import axios from "axios";
 import useAuth from "../hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
+
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [scholarship, setScholarship] = useState(null);
   const [loading, setLoading] = useState(true);
-  const {user} = useAuth();
-  const axiosSecure = useAxiosSecure()
+  const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     axios
@@ -19,18 +20,26 @@ const ScholarshipDetails = () => {
         setScholarship(res.data);
         setLoading(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         setLoading(false);
       });
   }, [id]);
 
   if (loading) {
-    return <p className="text-center mt-20 text-lg font-semibold animate-pulse">Loading scholarship...</p>;
+    return (
+      <p className="text-center mt-20 text-lg font-semibold animate-pulse">
+        Loading scholarship...
+      </p>
+    );
   }
 
   if (!scholarship) {
-    return <p className="text-center mt-20 text-red-500 text-lg font-semibold">Scholarship not found!</p>;
+    return (
+      <p className="text-center mt-20 text-red-500 text-lg font-semibold">
+        Scholarship not found!
+      </p>
+    );
   }
 
   const {
@@ -40,36 +49,35 @@ const ScholarshipDetails = () => {
     universityCountry,
     degree,
     applicationFees,
+    serviceCharge,
     scholarshipDescription,
+    universityWorldRank,
+    subjectCategory,
   } = scholarship;
 
-const handleApply = async () => {
-  if (!user) {
-    return navigate("/login");
-  }
+  const handleApply = async () => {
+    if (!user) return navigate("/login");
 
-  const applicationData = {
-    scholarshipId: scholarship._id,
-    userName: user.displayName,
-    universityName: scholarship.universityName,
-    subjectCategory: scholarship.subjectCategory,
-    degree: scholarship.degree,
-    applicationFees: scholarship.applicationFees,
-    serviceCharge: scholarship.serviceCharge,
-  };
+    const applicationData = {
+      scholarshipId: scholarship._id,
+      userName: user.displayName,
+      universityName,
+      subjectCategory,
+      degree,
+      applicationFees,
+      serviceCharge,
+    };
 
-  try {
-    const res = await axiosSecure.post("/applications", applicationData);
-
-    if (res.data.insertedId) {
-      alert("Application submitted successfully!");
-      navigate("/dashboard/my-applications");
+    try {
+      const res = await axiosSecure.post("/applications", applicationData);
+      if (res.data.insertedId) {
+        alert("Application submitted successfully!");
+        navigate("/dashboard/my-applications");
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Failed to apply");
     }
-  } catch (error) {
-    alert(error.response?.data?.message || "Failed to apply");
-  }
-};
-
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-12">
@@ -80,14 +88,21 @@ const handleApply = async () => {
           alt={universityName}
           className="w-full h-96 object-cover filter brightness-90"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
+        <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
           <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
             {universityName}
           </h1>
-          <div className="flex gap-3 mt-2">
-            <span className="bg-blue-600 text-white text-sm px-3 py-1 rounded-full">{scholarshipCategory}</span>
-            <span className="bg-green-600 text-white text-sm px-3 py-1 rounded-full">{degree}</span>
-            <span className="bg-white/30 text-white text-sm px-3 py-1 rounded-full">{universityCountry}</span>
+          <div className="flex flex-wrap gap-3 mt-2">
+            <span className="bg-primary text-white text-sm px-3 py-1 rounded-full">
+              {scholarshipCategory}
+            </span>
+            
+            {universityWorldRank && (
+              <span className="bg-primary text-white text-sm px-3 py-1 rounded-full">
+                World Rank #{universityWorldRank}
+              </span>
+            )}
+          
           </div>
         </div>
       </div>
@@ -103,7 +118,13 @@ const handleApply = async () => {
           <h3 className="text-xl font-semibold text-gray-800">Quick Info</h3>
           <div className="flex justify-between">
             <span className="font-medium text-gray-600">Application Fee:</span>
-            <span className="font-bold text-gray-900">${applicationFees}</span>
+            <span className="font-bold text-gray-900">
+              {applicationFees === 0 ? "Free" : `$${applicationFees}`}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-600">Service Charge:</span>
+            <span className="font-bold text-gray-900">${serviceCharge}</span>
           </div>
           <div className="flex justify-between">
             <span className="font-medium text-gray-600">Degree:</span>
@@ -113,10 +134,14 @@ const handleApply = async () => {
             <span className="font-medium text-gray-600">Country:</span>
             <span className="font-bold text-gray-900">{universityCountry}</span>
           </div>
-
+          <div className="flex justify-between">
+            <span className="font-medium text-gray-600">subject:</span>
+            <span className="font-bold text-gray-900">{subjectCategory}</span>
+          </div>
+         
           <button
             onClick={handleApply}
-            className="w-full bg-gradient-to-r from-purple-600 to-indigo-500 text-white font-semibold py-3 rounded-lg shadow-lg hover:scale-105 transition transform"
+            className="w-full bg-secondary  font-semibold py-3 rounded-lg shadow-lg hover:scale-105 transition transform"
           >
             Apply Now
           </button>

@@ -23,6 +23,7 @@ import MyApplications from "../pages/dashboard/student/MyApplications";
 import MyReviews from "../pages/dashboard/student/MyReviews";
 import AdminRoute from "./AdminRoute";
 import ModeratorRoute from "./ModeratorRoute";
+import PaymentPage from "../pages/dashboard/student/PaymentPage";
 
 const router = createBrowserRouter([
   {
@@ -85,26 +86,46 @@ const router = createBrowserRouter([
       },
       {
         path: "manage-scholarship",
-        element: <AdminRoute><ManageScholarships></ManageScholarships></AdminRoute>,
+        element: (
+          <AdminRoute>
+            <ManageScholarships></ManageScholarships>
+          </AdminRoute>
+        ),
       },
 
       {
         path: "admin-analytics",
-        element: <AdminRoute><AdminAnalytics></AdminAnalytics></AdminRoute>,
+        element: (
+          <AdminRoute>
+            <AdminAnalytics></AdminAnalytics>
+          </AdminRoute>
+        ),
       },
       {
         path: "manage-users",
-        element: <AdminRoute><ManageUsers></ManageUsers></AdminRoute>,
+        element: (
+          <AdminRoute>
+            <ManageUsers></ManageUsers>
+          </AdminRoute>
+        ),
       },
 
       //moderator routes
       {
         path: "manage-applications",
-        element: <ModeratorRoute><ManageApplication></ManageApplication></ModeratorRoute>,
+        element: (
+          <ModeratorRoute>
+            <ManageApplication></ManageApplication>
+          </ModeratorRoute>
+        ),
       },
       {
         path: "all-reviews",
-        element: <ModeratorRoute><AllReviews></AllReviews></ModeratorRoute>,
+        element: (
+          <ModeratorRoute>
+            <AllReviews></AllReviews>
+          </ModeratorRoute>
+        ),
       },
 
       //student routes
@@ -116,6 +137,10 @@ const router = createBrowserRouter([
         path: "my-reviews",
         element: <MyReviews></MyReviews>,
       },
+      {
+        path: "payment/:id",
+        element: <PaymentPage/>,
+      }
     ],
   },
 ]);
