@@ -23,13 +23,20 @@ import MyApplications from "../pages/dashboard/student/MyApplications";
 import MyReviews from "../pages/dashboard/student/MyReviews";
 import AdminRoute from "./AdminRoute";
 import ModeratorRoute from "./ModeratorRoute";
-import PaymentPage from "../pages/dashboard/student/PaymentPage";
+import PaymentPage from "../pages/dashboard/payment/PaymentPage";
+import PaymentSuccess from "../pages/dashboard/payment/PaymentSuccess";
+import PaymentCancelled from "../pages/dashboard/payment/Paymentcancelled";
+import Error404 from "../pages/Eror404";
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: MainLayout,
     children: [
+      {
+        path: "*",
+        element: <Error404 />,
+      },
       {
         index: true,
         Component: Home,
@@ -53,6 +60,10 @@ const router = createBrowserRouter([
     Component: AuthLayout,
     children: [
       {
+        path: "*",
+        element: <Error404 />,
+      },
+      {
         path: "login",
         element: <Login></Login>,
       },
@@ -74,6 +85,10 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      {
+        path: "*",
+        element: <Error404 />,
+      },
       {
         path: "my-profile",
         element: <MyProfile></MyProfile>,
@@ -139,8 +154,16 @@ const router = createBrowserRouter([
       },
       {
         path: "payment/:id",
-        element: <PaymentPage/>,
-      }
+        element: <PaymentPage />,
+      },
+      {
+        path: "payment-success",
+        element: <PaymentSuccess />,
+      },
+      {
+        path: "payment-cancelled",
+        element: <PaymentCancelled />,
+      },
     ],
   },
 ]);

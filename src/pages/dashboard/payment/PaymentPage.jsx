@@ -44,6 +44,24 @@ const PaymentPage = () => {
   const totalAmount =
     application.applicationFees + application.serviceCharge;
 
+const handlePayment = async () => {
+  try {
+    const paymentInfo = {
+      email: user.email,
+      scholarshipName: application.universityName,
+      applicationId: application._id, // <-- database record _id
+      applicationFees: application.applicationFees,
+      serviceCharge: application.serviceCharge,
+    };
+
+    const res = await axiosSecure.post("/create-checkout-session", paymentInfo);
+
+    window.location.replace(res.data.url);
+  } catch (error) {
+    console.error(error);
+    alert("Payment initiation failed");
+  }
+};
   return (
     <div className="min-h-screen bg-[#e7fafc] py-10 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
@@ -118,6 +136,7 @@ const PaymentPage = () => {
 
           {/* Pay Button */}
           <button
+          onClick={ handlePayment}
             className="w-full mt-6 bg-secondary text-black py-3 rounded-xl font-semibold text-lg shadow-lg hover:bg-primary hover:text-white hover:scale-[1.02] transition-transform"
           >
             Proceed to Secure Payment
