@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import axios from "axios";
+
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AddScholarship = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ const AddScholarship = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
+  const axiosSecure = useAxiosSecure();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +37,7 @@ const AddScholarship = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/scholarships", formData);
+      const res = await axiosSecure.post("/scholarships", formData);
       if (res.data?.insertedId) {
         setSuccess("Scholarship added successfully!");
         setFormData({
@@ -68,7 +70,9 @@ const AddScholarship = () => {
       animate={{ y: 0, opacity: 1 }}
       className="p-6 bg-[#e7fafc]"
     >
-      <h2 className="text-3xl font-bold mb-6 text-gray-800">Add New Scholarship</h2>
+      <h2 className="text-3xl font-bold mb-6 text-gray-800">
+        Add New Scholarship
+      </h2>
       {success && <p className="text-green-600 mb-2">{success}</p>}
       {error && <p className="text-red-600 mb-2">{error}</p>}
 
@@ -183,7 +187,10 @@ const AddScholarship = () => {
           type="date"
           className="input input-bordered w-full hover:bg-[#e7fafc]"
         />
-        <button disabled={loading} className="btn bg-secondary col-span-full mt-2">
+        <button
+          disabled={loading}
+          className="btn bg-secondary col-span-full mt-2"
+        >
           {loading ? "Adding..." : "Add Scholarship"}
         </button>
       </form>

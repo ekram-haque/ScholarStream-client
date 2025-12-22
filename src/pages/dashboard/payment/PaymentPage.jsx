@@ -5,7 +5,7 @@ import useAuth from "../../../hooks/useAuth";
 import { FaUniversity, FaUser, FaMoneyBillWave } from "react-icons/fa";
 
 const PaymentPage = () => {
-  const { id } = useParams(); // application id
+  const { id } = useParams(); 
   const axiosSecure = useAxiosSecure();
   const { user } = useAuth();
 

@@ -7,11 +7,11 @@ import { motion } from "framer-motion";
 const AuthLayout = () => {
   return (
     <div className="w-11/12 mx-auto ">
-      <div className="bg-primary my-2 rounded-lg ml-5 mr-[85%]">
+      <div className="bg-primary my-2 rounded-lg ml-5 md:mr-[85%]">
         <Link to={'/'}> <Logo /></Link>
       </div>
 
-      <div className="flex justify-around items-center">
+      <div className="md:flex  justify-around items-center">
         <Outlet />
         <motion.img
           src={authimg}

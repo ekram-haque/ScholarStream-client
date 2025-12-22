@@ -5,7 +5,7 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 const ManageUsers = () => {
   const axiosSecure = useAxiosSecure();
   const [users, setUsers] = useState([]);
-  const [filterRole, setFilterRole] = useState("all"); // default: show all
+  const [filterRole, setFilterRole] = useState("all"); 
   const [loading, setLoading] = useState(true);
 
   // Fetch all users

@@ -21,12 +21,12 @@ const Register = () => {
 const handleRegister = (data) => {
   const profileImage = data.photoURL[0];
 
-  // 1️⃣ Firebase Register
+  //  Firebase Register
   registerUser(data.email, data.password)
     .then(() => {
       // const user = result.user;
 
-      // 2️⃣ Upload image to imgbb
+      //  Upload image to imgbb
       const formData = new FormData();
       formData.append("image", profileImage);
 
@@ -37,7 +37,7 @@ const handleRegister = (data) => {
       axios.post(image_api_url, formData).then((imgRes) => {
         const photoURL = imgRes.data.data.url;
 
-        // 3️⃣ Save user to MongoDB
+        //  Save user to MongoDB
         const userInfo = {
           name: data.username,     
           email: data.email,
@@ -54,7 +54,7 @@ const handleRegister = (data) => {
 
         // 5️⃣ Get JWT token
         axios
-          .post("http://localhost:5000/jwt", {
+          .post("/jwt", {
             email: data.email,
           })
           .then((jwtRes) => {

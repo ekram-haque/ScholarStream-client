@@ -31,7 +31,7 @@ const Login = () => {
       });
 
       // get jwt
-      axiosSecure.post("http://localhost:5000/jwt", {
+      axiosSecure.post("/jwt", {
         email: user.email,
       }).then(res => {
         localStorage.setItem("access-token", res.data.token);
@@ -52,7 +52,7 @@ const handleGoogleSignIn = () => {
       });
 
       // get jwt
-      axiosSecure.post("http://localhost:5000/jwt", {
+      axiosSecure.post("/jwt", {
         email: user.email,
       }).then(res => {
         localStorage.setItem("access-token", res.data.token);
@@ -61,7 +61,7 @@ const handleGoogleSignIn = () => {
     });
 };
   return (
-    <div class="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
+    <div class="card bg-base-100 w-full  max-w-sm shrink-0 shadow-2xl">
       <div class="card-body">
         <form onSubmit={handleSubmit(handleRegister)}>
           <fieldset class="fieldset">

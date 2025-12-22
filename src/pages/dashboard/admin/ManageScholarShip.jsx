@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const ManageScholarships = () => {
@@ -17,7 +17,7 @@ const ManageScholarships = () => {
       setScholarships(res.data.scholarships || res.data || []);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to fetch scholarships");
+      alert("Failed to fetch scholarships");
     } finally {
       setLoading(false);
     }
@@ -36,11 +36,11 @@ const ManageScholarships = () => {
 
     try {
       await axiosSecure.delete(`/scholarships/${id}`);
-      toast.success("Scholarship deleted successfully");
+      alert("Scholarship deleted successfully");
       setScholarships((prev) => prev.filter((sch) => sch._id !== id));
     } catch (error) {
       console.error(error);
-      toast.error("Failed to delete scholarship");
+      alert("Failed to delete scholarship");
     }
   };
 
@@ -59,10 +59,10 @@ const handleSaveEdit = async () => {
       prev.map((sch) => (sch._id === _id ? res.data : sch))
     );
     setEditModal(false);
-    toast.success("Scholarship updated successfully");
+    alert("Scholarship updated successfully");
   } catch (err) {
     console.error(err);
-    toast.error(err.response?.data?.message || "Failed to update");
+    alert(err.response?.data?.message || "Failed to update");
   }
 };
 

@@ -35,7 +35,7 @@ const AdminAnalytics = () => {
       .then(res => setAnalytics(res.data))
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [axiosSecure]);
 
   // ---------- BAR CHART ----------
   const barData = useMemo(() => {
