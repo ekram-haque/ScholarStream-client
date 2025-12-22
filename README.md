@@ -1,16 +1,76 @@
-# React + Vite
+# ScholarStream 🎓  
+A Full-Stack Scholarship Management Platform (MERN)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🔗 Live Website
+👉 https://scholarstream.pages.dev
 
-Currently, two official plugins are available:
+## 📌 Project Purpose
+ScholarStream is a full-stack MERN application designed to help students discover and apply for scholarships easily, while allowing moderators and admins to manage applications, users, and analytics efficiently.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 👥 User Roles
+- **Student** – Apply for scholarships, make payments, track applications, and give reviews.
+- **Moderator** – Review applications, provide feedback, update status, and manage reviews.
+- **Admin** – Manage users, scholarships, and view analytics.
 
-## React Compiler
+## 🚀 Key Features
+### 🔐 Authentication
+- Email & Password login
+- Google social login
+- Role-based authorization (Student / Moderator / Admin)
+- JWT-secured API routes
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 🎓 Scholarships
+- View all scholarships with search, filter, sort & pagination
+- Scholarship details with reviews
+- Apply with secure Stripe payment
 
-## Expanding the ESLint configuration
+### 💳 Payment System
+- Stripe Checkout integration
+- Payment success & cancellation handling
+- Payment status update (unpaid → paid)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 📊 Dashboard (Role Based)
+- **Student Dashboard**
+  - My Applications
+  - Pay / Edit / Delete application
+  - Add & manage reviews
+- **Moderator Dashboard**
+  - Manage applications
+  - Update application status
+  - Give feedback
+  - Review moderation
+- **Admin Dashboard**
+  - Manage users & roles
+  - Add / update / delete scholarships
+  - Analytics with charts
+
+### 🎨 UI & UX
+- Modern, recruiter-friendly UI
+- Fully responsive (mobile / tablet / desktop)
+- DaisyUI + Tailwind CSS
+- Loading spinners & custom 404 page
+
+---
+
+## 🛠️ Technologies Used
+### Frontend
+- React
+- React Router
+- Tailwind CSS
+- DaisyUI
+- Axios
+- React Icons
+- Framer Motion
+- Firebase
+- React charts
+
+### Backend
+- Node.js
+- Express.js
+- MongoDB
+- JWT
+- Stripe API
+- CORS
+- dotenv
+
+---

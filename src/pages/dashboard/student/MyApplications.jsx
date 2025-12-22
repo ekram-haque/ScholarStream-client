@@ -83,22 +83,23 @@ const MyApplications = () => {
     setReviewModal(true);
   };
 
-  const handleSubmitReview = async () => {
-    try {
-      await axiosSecure.post("/reviews", {
-        applicationId: selectedApp._id,
-        scholarshipName: selectedApp.scholarshipName,
-        universityName: selectedApp.universityName,
-        ratingPoint: reviewData.rating,
-        reviewComment: reviewData.comment,
-      });
-      alert("Review submitted!");
-      setReviewModal(false);
-      setReviewData({ rating: 5, comment: "" });
-    } catch (error) {
-      alert(error.response?.data?.message || "Failed to submit review");
-    }
-  };
+const handleSubmitReview = async () => {
+  try {
+    await axiosSecure.post("/reviews", {
+      applicationId: selectedApp._id,
+      ratingPoint: Number(reviewData.rating),
+      reviewComment: reviewData.comment,
+    });
+
+    alert("Review submitted successfully!");
+    setReviewModal(false);
+    setReviewData({ rating: 5, comment: "" });
+
+  } catch (error) {
+    alert(error.response?.data?.message || "Failed to submit review");
+  }
+};
+
 
   if (loading) {
     return (
@@ -121,7 +122,7 @@ const MyApplications = () => {
           <thead className="bg-primary text-secondary ">
             <tr>
               <th className="px-4 py-2 text-left">University</th>
-              <th className="px-4 py-2 text-left">Address</th>
+              
               <th className="px-4 py-2 text-left">Feedback</th>
               <th className="px-4 py-2 text-left">Subject</th>
               <th className="px-4 py-2 text-left">Fees</th>
@@ -133,10 +134,9 @@ const MyApplications = () => {
             {applications.map((app) => (
               <tr key={app._id} className="border-b hover:bg-[#e7fafc] transition">
                 <td className="px-4 py-2">{app.universityName}</td>
-                <td className="px-4 py-2">{app.universityAddress || "-"}</td>
                 <td className="px-4 py-2">{app.feedback || "-"}</td>
                 <td className="px-4 py-2">{app.subjectCategory}</td>
-                <td className="px-4 py-2">${app.applicationFees}</td>
+                <td className="px-4 py-2">${app.applicationFees + app.serviceCharge}</td>
                 <td className="px-4 py-2">{app.applicationStatus}</td>
                 <td className="px-4 py-2 flex flex-wrap gap-1">
                   <button

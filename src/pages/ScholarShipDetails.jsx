@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
-import axios from "axios";
+
 import useAuth from "../hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
@@ -14,8 +14,8 @@ const ScholarshipDetails = () => {
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/scholarships/${id}`)
+    axiosSecure
+      .get(`/scholarships/${id}`)
       .then((res) => {
         setScholarship(res.data);
         setLoading(false);
@@ -24,7 +24,7 @@ const ScholarshipDetails = () => {
         console.error(err);
         setLoading(false);
       });
-  }, [id]);
+  }, [id,axiosSecure]);
 
   if (loading) {
     return (
@@ -56,7 +56,8 @@ const ScholarshipDetails = () => {
   } = scholarship;
 
   const handleApply = async () => {
-    if (!user) return navigate("/login");
+    if (!user) return navigate("/authentication/login");
+    console.log('user',user)
 
     const applicationData = {
       scholarshipId: scholarship._id,

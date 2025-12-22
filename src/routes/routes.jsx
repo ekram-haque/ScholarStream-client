@@ -51,7 +51,7 @@ const router = createBrowserRouter([
       },
       {
         path: "scholarships/:id",
-        Component: ScholarshipDetails,
+        element: <PrivateRoute><ScholarshipDetails></ScholarshipDetails></PrivateRoute>,
       },
     ],
   },
@@ -59,10 +59,7 @@ const router = createBrowserRouter([
     path: "authentication",
     Component: AuthLayout,
     children: [
-      {
-        path: "*",
-        element: <Error404 />,
-      },
+    
       {
         path: "login",
         element: <Login></Login>,
@@ -85,10 +82,7 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      {
-        path: "*",
-        element: <Error404 />,
-      },
+     
       {
         path: "my-profile",
         element: <MyProfile></MyProfile>,
