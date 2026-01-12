@@ -12,7 +12,7 @@ const AllScholarships = () => {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
 
-  const limit = 6;
+  const limit = 8;
   const totalPages = Math.ceil(count / limit);
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const AllScholarships = () => {
       {search.trim() !== "" && scholarships.length === 0 ? (
         <p className="p-6 text-center text-gray-500">No Scholarships found.</p>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {scholarships.map((scholarship) => (
             <ScholarshipCard
               key={scholarship._id}

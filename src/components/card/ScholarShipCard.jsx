@@ -13,70 +13,63 @@ const ScholarshipCard = ({ scholarship }) => {
   } = scholarship;
 
   return (
-    <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 h-full flex flex-col group">
+    <div className="relative w-full max-w-sm mx-auto rounded-3xl overflow-hidden shadow-2xl group">
 
-      {/* Image Section */}
-      <div className="relative">
-        <img
-          src={universityImage}
-          alt={universityName}
-          className="h-48 w-full object-cover group-hover:scale-105 transition-transform duration-300"
-        />
+      {/* IMAGE */}
+      <img
+        src={universityImage}
+        alt={universityName}
+        className="h-[380px] w-full object-cover group-hover:scale-105 transition duration-500"
+      />
 
-       
-      </div>
+      {/* DARK GRADIENT OVERLAY */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
 
-      {/* Content */}
-      <div className="p-5 flex flex-col flex-1">
+      {/* CONTENT */}
+      <div className="absolute bottom-0 p-5 text-white w-full space-y-3">
 
-        <div className="flex gap-4 mb-4">
-
-
-
-         {/* Scholarship Category */}
-        <span className="  bg-secondary   text-xs font-semibold px-3 py-1 rounded-lg shadow">
-          {scholarshipCategory}
-        </span>
-
-        {/* World Rank */}
-        {universityWorldRank && (
-          <span className="  bg-secondary text-gray-900 text-xs font-semibold px-3 py-1 rounded-lg shadow">
-            🌍 Rank #{universityWorldRank}
+        {/* TOP TAGS */}
+        <div className="flex gap-2 text-xs">
+          <span className="bg-white/20 backdrop-blur px-3 py-1 rounded-full">
+            {scholarshipCategory}
           </span>
-        )}
+
+          {universityWorldRank && (
+            <span className="bg-white/20 backdrop-blur px-3 py-1 rounded-full">
+              🌍 #{universityWorldRank}
+            </span>
+          )}
         </div>
 
-        {/* University Name */}
-        <h3 className="text-lg font-semibold text-gray-900 leading-snug">
+        {/* TITLE */}
+        <h3 className="text-xl font-semibold leading-tight">
           {universityName}
         </h3>
 
-        {/* Location */}
-        <p className="text-sm text-gray-500 mt-1">
+        {/* LOCATION */}
+        <p className="text-sm text-gray-200">
           {universityCity ? `${universityCity}, ` : ""}
           {universityCountry}
         </p>
 
-        
+        {/* PRICE + CTA */}
+        <div className="flex items-center justify-between pt-3">
+          <div className="text-sm">
+            <p className="text-gray-300">Application Fee</p>
+            <p className="text-lg font-bold">
+              {applicationFees === 0 ? "Free" : `$${applicationFees}`}
+            </p>
+          </div>
 
-        {/* Divider */}
-        <div className="my-4 border-t border-secondary"></div>
-
-        {/* Fee */}
-        <div className="flex  items-center text-sm mb-4">
-          <span className="text-gray-600 mr-2">Application Fee :  </span>
-          <span className={`font-semibold ${applicationFees === 0 ? "text-green-600" : "text-gray-900"}`}>
-            {applicationFees === 0 ? "Free" : `$${applicationFees}`}
-          </span>
+          <Link
+            to={`/scholarships/${_id}`}
+            className="bg-white text-black px-6 py-2 rounded-full 
+                       text-sm font-semibold shadow 
+                       hover:scale-105 transition"
+          >
+            View
+          </Link>
         </div>
-
-        {/* CTA */}
-        <Link
-          to={`/scholarships/${_id}`}
-          className="mt-auto inline-flex justify-center items-center px-4 py-2 rounded-lg text-sm font-medium border border-secondary text-primary hover:bg-secondary hover:scale-105 transition transform"
-        >
-          View Details
-        </Link>
       </div>
     </div>
   );
