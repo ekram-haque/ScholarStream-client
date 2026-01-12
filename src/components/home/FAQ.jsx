@@ -24,7 +24,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="bg-[#e7fafc] rounded-2xl py-16 mb-20" id="faq">
+    <section className="bg-[#E3F8F8] rounded-2xl py-16 mb-24" id="faq">
       <div className="max-w-3xl mx-auto px-6">
         <h2 className="text-3xl font-bold text-center mb-10">Frequently Asked Questions</h2>
         <div className="space-y-4">

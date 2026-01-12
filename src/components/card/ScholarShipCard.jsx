@@ -65,9 +65,9 @@ const ScholarshipCard = ({ scholarship }) => {
             to={`/scholarships/${_id}`}
             className="bg-white text-black px-6 py-2 rounded-full 
                        text-sm font-semibold shadow 
-                       hover:scale-105 transition"
+                       hover:scale-105 transition hover:bg-primary hover:text-white"
           >
-            View
+            View Details
           </Link>
         </div>
       </div>

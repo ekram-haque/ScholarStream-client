@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 const Sidebar = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
@@ -23,17 +23,16 @@ const Sidebar = () => {
     return <div className="p-10 text-center">Loading Dashboard...</div>;
   }
 
+  const navItemClass = ({ isActive }) =>
+    `flex items-center gap-3 px-4 py-2 rounded-lg transition-all duration-300 is-drawer-close:tooltip is-drawer-close:tooltip-right
+  ${isActive ? "bg-primary text-secondary font-semibold" : "text-primary "}`;
   return (
     <div>
       {/* Sidebar content here */}
       <ul className="menu w-full grow">
         {/* List item */}
         <li>
-          <Link
-            to={"/"}
-            className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-            data-tip="Homepage"
-          >
+          <Link to={"/"} className={navItemClass} data-tip="Homepage">
             {/* Home icon */}
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -52,36 +51,12 @@ const Sidebar = () => {
           </Link>
         </li>
 
-        <li>
-          <Link
-            to={"/dashboard/my-profile"}
-            className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-            data-tip="Profile"
-          >
-            {/* profile icon */}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              strokeLinejoin="round"
-              strokeLinecap="round"
-              strokeWidth="2"
-              fill="none"
-              stroke="currentColor"
-              className="my-1.5 inline-block size-4"
-            >
-              <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"></path>
-              <path d="M6 20v-2c0-2.21 3.58-4 6-4s6 1.79 6 4v2"></path>
-            </svg>
-            <span className="is-drawer-close:hidden">Profile</span>
-          </Link>
-        </li>
-
         {role === "admin" && (
           <>
             <li>
               <Link
                 to={"/dashboard/add-scholarship"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={navItemClass}
                 data-tip="add-scholarship"
               >
                 {/* Add Scholarship icon */}
@@ -107,7 +82,7 @@ const Sidebar = () => {
             <li>
               <Link
                 to={"/dashboard/manage-scholarship"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={navItemClass}
                 data-tip="manage-scholarship"
               >
                 {/* manage-scholarship icon */}
@@ -136,7 +111,7 @@ const Sidebar = () => {
             <li>
               <Link
                 to={"/dashboard/manage-users"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={navItemClass}
                 data-tip="Manage Users"
               >
                 {/* Manage Users icon */}
@@ -161,7 +136,7 @@ const Sidebar = () => {
             <li>
               <Link
                 to={"/dashboard/admin-analytics"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={navItemClass}
                 data-tip="analytics"
               >
                 {/* Analytics icon */}
@@ -191,7 +166,7 @@ const Sidebar = () => {
             <li>
               <Link
                 to={"/dashboard/manage-applications"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={navItemClass}
                 data-tip=" Manage Applications"
               >
                 {/*  Manage Applications icon */}
@@ -219,7 +194,7 @@ const Sidebar = () => {
             <li>
               <Link
                 to={"/dashboard/all-reviews"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={navItemClass}
                 data-tip=" All Reviews"
               >
                 {/*  All Reviews icon */}
@@ -245,12 +220,12 @@ const Sidebar = () => {
         {role === "student" && (
           <>
             <li>
-              <Link
-                to={"/dashboard/my-applications"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+              <NavLink
+                to="/dashboard/my-applications"
                 data-tip="My Applications"
+                className={navItemClass}
               >
-                {/* My Applications icon */}
+                {/* Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -259,19 +234,20 @@ const Sidebar = () => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="my-1.5 inline-block size-4"
+                  className="my-1.5 size-4"
                 >
                   <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
                   <path d="M14 2v6h6" />
                 </svg>
-                <span className="is-drawer-close:hidden">My Applications</span>
-              </Link>
-            </li>
 
+                {/* Label */}
+                <span className="is-drawer-close:hidden">My Applications</span>
+              </NavLink>
+            </li>
             <li>
-              <Link
+              <NavLink
                 to={"/dashboard/my-reviews"}
-                className="is-drawer-close:tooltip is-drawer-close:tooltip-right"
+                className={navItemClass}
                 data-tip="My Reviews"
               >
                 {/* My Reviews icon */}
@@ -289,7 +265,7 @@ const Sidebar = () => {
                   <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
                 </svg>
                 <span className="is-drawer-close:hidden">My Reviews</span>
-              </Link>
+              </NavLink>
             </li>
           </>
         )}

@@ -27,6 +27,7 @@ import PaymentPage from "../pages/dashboard/payment/PaymentPage";
 import PaymentSuccess from "../pages/dashboard/payment/PaymentSuccess";
 import PaymentCancelled from "../pages/dashboard/payment/Paymentcancelled";
 import Error404 from "../pages/Eror404";
+import DashboardRedirect from "./DashboardRedirect";
 
 const router = createBrowserRouter([
   {
@@ -51,7 +52,11 @@ const router = createBrowserRouter([
       },
       {
         path: "scholarships/:id",
-        element: <PrivateRoute><ScholarshipDetails></ScholarshipDetails></PrivateRoute>,
+        element: <ScholarshipDetails></ScholarshipDetails>,
+      },
+      {
+        path: "my-profile",
+        element: <MyProfile></MyProfile>,
       },
     ],
   },
@@ -59,7 +64,6 @@ const router = createBrowserRouter([
     path: "authentication",
     Component: AuthLayout,
     children: [
-    
       {
         path: "login",
         element: <Login></Login>,
@@ -82,12 +86,10 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-     
       {
-        path: "my-profile",
-        element: <MyProfile></MyProfile>,
+        index: true,
+        element: <DashboardRedirect />,
       },
-
       //admin routes
       {
         path: "add-scholarship",

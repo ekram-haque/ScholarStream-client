@@ -7,6 +7,7 @@ import "swiper/css/pagination";
 import { motion } from "framer-motion";
 import { Link } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import ScholarshipCard from "../card/ScholarShipCard";
 
 export default function TopScholarShip() {
   const [scholarships, setScholarships] = useState([]);
@@ -20,99 +21,110 @@ export default function TopScholarShip() {
         setScholarships(res.data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error("Failed to fetch top scholarships:", err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, [axiosSecure]);
 
   if (loading) {
-    return <div className="text-center py-20 text-gray-500">Loading top scholarships...</div>;
+    return (
+      <div className="text-center py-20 text-gray-500">
+        Loading top scholarships...
+      </div>
+    );
   }
 
   return (
-    <div className="w-full mb-20 px-6 lg:px-24 py-16">
-      <motion.h2
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="text-4xl font-bold "
-      >
-        Featured Scholarships
-      </motion.h2>
+    <section className="w-full mb-24 px-6 lg:px-24 py-16">
+      {/* HEADER */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-10">
+        <div>
+          <motion.h2
+            initial={{ opacity: 0, y: -20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            viewport={{ once: true }}
+            className="text-4xl font-bold text-gray-900"
+          >
+            Featured Scholarships
+          </motion.h2>
 
-      <p className="text-gray-600 mt-2 mb-6 ">
-        Here are some of the best scholarships with approaching deadlines.
-      </p>
+          <p className="text-gray-600 mt-2 max-w-xl">
+            Explore top scholarships with upcoming deadlines from trusted
+            institutions.
+          </p>
+        </div>
 
-      <div className="">
         <Link
           to="/all-scholarships"
-          className="inline-block bg-secondary text-black px-7 py-3 rounded-lg text-lg shadow-md hover:bg-primary hover:text-white transition"
+          className="bg-secondary text-black px-7 py-3 rounded-xl font-semibold
+          shadow-md hover:bg-primary hover:text-white transition"
         >
           View All
         </Link>
       </div>
 
-      <div className="mt-10 relative overflow-visible">
+      {/* SLIDER */}
+      <div className="relative overflow-visible ">
         <Swiper
-          className="pb-10 relative"
-          style={{ paddingBottom: "60px" }}
           modules={[Navigation, Pagination, Autoplay]}
           spaceBetween={30}
           slidesPerView={1}
+          loop
+          autoplay={{ delay: 3500, disableOnInteraction: false }}
+          pagination={{
+            clickable: true,
+            renderBullet: (index, className) => `
+      <span class="
+        ${className}
+        inline-block mx-1
+        w-3 h-3 rounded-full
+        bg-gray-300
+        transition-all duration-300 
+      "></span>
+    `,
+          }}
           navigation={{ nextEl: ".swiper-next", prevEl: ".swiper-prev" }}
-          pagination={{ clickable: true }}
-          autoplay={{ delay: 3000, disableOnInteraction: false }}
-          loop={true}
-          breakpoints={{ 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }}
+          breakpoints={{
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 4 },
+          }}
+          className="
+  pb-16 pt-6
+  [&_.swiper-pagination]:bottom-0
+  [&_.swiper-pagination]:mt-8
+"
         >
-          {scholarships.map((item) => (
-            <SwiperSlide key={item._id}>
+          {scholarships.map((scholarship) => (
+            <SwiperSlide>
               <motion.div
-                whileHover={{ scale: 1.02 }}
-                className="bg-[#E3F8F8] shadow-md rounded-3xl p-6 h-full flex flex-col justify-between"
+                whileHover={{ y: -6 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className=" rounded-3xl shadow-sm p-6 py-5 h-full flex flex-col"
               >
-                <div>
-                  <img src={item.universityImage || ""} alt={item.scholarshipName} className="w-14 h-14 mb-4" />
-                  <h3 className="text-xl font-semibold">{item.scholarshipName}</h3>
-
-                  <div className="flex items-center gap-4 mt-4">
-                    <span className="font-medium">Amount:</span>
-                    <span>${item.applicationFees}</span>
-                  </div>
-
-                  <div className="flex items-center gap-4 mt-2">
-                    <span className="font-medium">Deadline:</span>
-                    <span>{new Date(item.applicationDeadline).toLocaleDateString()}</span>
-                  </div>
-
-                  <p className="text-gray-700 mt-4 text-sm line-clamp-3">{item.scholarshipDescription}</p>
-
-                  <div className="flex gap-3 mt-4 flex-wrap">
-                    {(Array.isArray(item.subjectCategory) ? item.subjectCategory : []).map((tag, idx) => (
-                      <span key={idx} className="bg-white px-3 py-1 rounded-full text-sm shadow-sm">
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                <Link
-                  to={`/scholarships/${item._id}`}
-                  className="mt-6 inline-block bg-secondary text-white py-2 rounded-xl text-center w-full hover:bg-primary transition"
-                >
-                  View Details
-                </Link>
+                {/* TOP */}
+                {<ScholarshipCard scholarship={scholarship} />}
+    
               </motion.div>
             </SwiperSlide>
           ))}
         </Swiper>
 
-        {/* Custom Arrows */}
-        <div className="swiper-prev absolute -left-20 top-1/2 -translate-y-1/2 bg-[#E3F8F8] shadow-lg w-14 h-14 flex items-center justify-center rounded-full cursor-pointer z-50 text-2xl font-bold">←</div>
-        <div className="swiper-next absolute -right-20 top-1/2 -translate-y-1/2 bg-[#E3F8F8] shadow-lg w-14 h-14 flex items-center justify-center rounded-full cursor-pointer z-50 text-2xl font-bold">→</div>
+        {/* CUSTOM ARROWS */}
+        <div
+          className="swiper-prev absolute -left-16 top-1/2 -translate-y-1/2
+          bg-white shadow-lg w-12 h-12 flex items-center justify-center
+          rounded-full cursor-pointer z-50 text-xl hover:bg-primary hover:text-white"
+        >
+          ←
+        </div>
+
+        <div
+          className="swiper-next absolute -right-16 top-1/2 -translate-y-1/2
+          bg-white shadow-lg w-12 h-12 flex items-center justify-center
+          rounded-full cursor-pointer z-50 text-xl hover:bg-primary hover:text-white"
+        >
+          →
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
