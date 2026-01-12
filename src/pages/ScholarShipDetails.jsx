@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import useAuth from "../hooks/useAuth";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 
-
 const ScholarshipDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -20,11 +19,8 @@ const ScholarshipDetails = () => {
         setScholarship(res.data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
-  }, [id,axiosSecure]);
+      .catch(() => setLoading(false));
+  }, [id, axiosSecure]);
 
   if (loading) {
     return (
@@ -57,7 +53,6 @@ const ScholarshipDetails = () => {
 
   const handleApply = async () => {
     if (!user) return navigate("/authentication/login");
-    console.log('user',user)
 
     const applicationData = {
       scholarshipId: scholarship._id,
@@ -81,71 +76,107 @@ const ScholarshipDetails = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-12">
-      {/* Hero Section */}
-      <div className="relative rounded-xl overflow-hidden shadow-2xl">
-        <img
-          src={universityImage}
-          alt={universityName}
-          className="w-full h-96 object-cover filter brightness-90"
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent flex flex-col justify-end p-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-white drop-shadow-lg">
-            {universityName}
-          </h1>
-          <div className="flex flex-wrap gap-3 mt-2">
-            <span className="bg-primary text-white text-sm px-3 py-1 rounded-full">
+    <div className="max-w-8xl mx-auto px-4 py-25">
+      <div className="grid md:grid-cols-2 gap-10 items-center bg-white rounded-2xl shadow-2xl p-20">
+        {/* LEFT IMAGE */}
+        <div className="relative">
+          <img
+            src={universityImage}
+            alt={universityName}
+            className="w-full h-[500px] object-cover rounded-xl"
+          />
+        </div>
+
+        {/* RIGHT CONTENT */}
+        <div className="space-y-5">
+          <p className="uppercase tracking-wide  ">
+            <span
+              className="border border-gray-300 
+                   px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-primary hover:text-white"
+            >
+              {" "}
               {scholarshipCategory}
             </span>
-            
+          </p>
+
+          <h1 className="text-3xl font-bold text-gray-800">{universityName}</h1>
+
+          <p className="text-gray-600 leading-relaxed">
+            {scholarshipDescription}
+          </p>
+
+          <div className="flex flex-wrap gap-3 text-sm">
+            <span
+              className="flex items-center gap-1 border border-gray-300 
+                   px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-primary hover:text-white"
+            >
+              Degree: <span className="font-semibold">{degree}</span>
+            </span>
+
+            <span
+              className="flex items-center gap-1 border border-gray-300 
+                   px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-primary hover:text-white"
+            >
+              Subject: <span className="font-semibold">{subjectCategory}</span>
+            </span>
+
+            <span
+              className="flex items-center gap-1 border border-gray-300 
+                   px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-primary hover:text-white"
+            >
+              Country:{" "}
+              <span className="font-semibold ">{universityCountry}</span>
+            </span>
+
             {universityWorldRank && (
-              <span className="bg-primary text-white text-sm px-3 py-1 rounded-full">
-                World Rank #{universityWorldRank}
+              <span
+                className="flex items-center gap-1 border border-gray-300 
+                     px-4 py-2 rounded-full text-gray-700 font-medium hover:bg-primary hover:text-white"
+              >
+                World Rank:{" "}
+                <span className="font-semibold">{universityWorldRank}</span>
               </span>
             )}
-          
           </div>
-        </div>
-      </div>
 
-      {/* Description Section */}
-      <div className="mt-10 grid md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 space-y-6">
-          <h2 className="text-2xl font-semibold text-gray-800">About this Scholarship</h2>
-          <p className="text-gray-700 leading-relaxed">{scholarshipDescription}</p>
-        </div>
+          {/* PRICE STYLE SECTION */}
+          <div className="flex items-center justify-between pt-6 border-t">
+            {/* LEFT INFO */}
+            <div className="space-y-2">
+              <div className="flex justify-between gap-8 text-sm text-gray-500">
+                <span>Application Fee</span>
+                <span className="font-medium text-gray-800">
+                  {applicationFees === 0 ? "Free" : `$${applicationFees}`}
+                </span>
+              </div>
 
-        <div className="space-y-6 p-6 border rounded-xl bg-white shadow-lg">
-          <h3 className="text-xl font-semibold text-gray-800">Quick Info</h3>
-          <div className="flex justify-between">
-            <span className="font-medium text-gray-600">Application Fee:</span>
-            <span className="font-bold text-gray-900">
-              {applicationFees === 0 ? "Free" : `$${applicationFees}`}
-            </span>
+              <div className="flex justify-between gap-8 text-sm text-gray-500">
+                <span>Service Charge</span>
+                <span className="font-medium text-gray-800">
+                  ${serviceCharge}
+                </span>
+              </div>
+
+              <div className="flex justify-between gap-8 pt-2 border-t">
+                <span className="text-sm font-semibold text-gray-700">
+                  Total
+                </span>
+                <span className="text-xl font-bold text-gray-900">
+                  ${Number(applicationFees || 0) + Number(serviceCharge || 0)}
+                </span>
+              </div>
+            </div>
+
+            {/* RIGHT BUTTON */}
+            <button
+              onClick={handleApply}
+              className="bg-secondary text-black px-10 py-3 rounded-full 
+               font-semibold shadow-md 
+               hover:shadow-lg hover:scale-105 transition hover:bg-primary hover:text-white"
+            >
+              Apply Now
+            </button>
           </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-gray-600">Service Charge:</span>
-            <span className="font-bold text-gray-900">${serviceCharge}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-gray-600">Degree:</span>
-            <span className="font-bold text-gray-900">{degree}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-gray-600">Country:</span>
-            <span className="font-bold text-gray-900">{universityCountry}</span>
-          </div>
-          <div className="flex justify-between">
-            <span className="font-medium text-gray-600">subject:</span>
-            <span className="font-bold text-gray-900">{subjectCategory}</span>
-          </div>
-         
-          <button
-            onClick={handleApply}
-            className="w-full bg-secondary  font-semibold py-3 rounded-lg shadow-lg hover:scale-105 transition transform"
-          >
-            Apply Now
-          </button>
         </div>
       </div>
     </div>
